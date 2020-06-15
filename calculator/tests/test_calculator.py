@@ -3,8 +3,8 @@ import unittest
 
 from selenium import webdriver
 
-from calculator.server.api import app
-from calculator.server.server import Server
+from server.api import app
+from server.server import Server
 
 HOME = "http://localhost:3000"
 RESULTS_PANEL_ID = 'results_panel'
@@ -36,6 +36,7 @@ class CalculatorActions(unittest.TestCase):
         t.start()
 
     def setUp(self):
+        print("Testing", self._testMethodName)
         self.click("clear_button")
 
     def test_calculator_exists(self):
@@ -158,7 +159,6 @@ class CalculatorActions(unittest.TestCase):
         self.click("two_button")
         assert self.get_result() == '2'
         self.click("equals_button")
-        print(f"self.get_result(): {self.get_result()}")
         assert self.get_result() == '0.75'
 
     def test_one_dot_five_minus_one_dot_three(self):
@@ -176,7 +176,6 @@ class CalculatorActions(unittest.TestCase):
         self.click("three_button")
         assert self.get_result() == '1.3'
         self.click("equals_button")
-        print(f"self.get_result(): {self.get_result()}")
         assert self.get_result() == '0.2'
 
     def test_user_can_start_a_new_chain_of_operations(self):
