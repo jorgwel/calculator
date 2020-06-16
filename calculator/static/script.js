@@ -1,56 +1,67 @@
 var firstNumber = null;
 var secondNumber = null;
 var operator = null;
-var actionTypes = { 
+var actionTypes = {
     TYPING_DIGIT: 'TYPING_DIGIT',
     SETTING_OPERATION: 'SETTING_OPERATION',
     CALCULATE: 'CALCULATE',
     CLEAR: 'CLEAR'
 };
-var operators = { PLUS :'+', MINUS :'-', TIMES :'*', DIVISION : '/' };
 
-function setResult(value){
-    $("#results_panel").html(value);
+var operators = {PLUS: '+', MINUS: '-', TIMES: '*', DIVISION: '/'};
+var ui = new Ui();
+
+function isUserIntroducingFirstNumber() {
+    return operator === null && secondNumber === null;
 }
 
-function getResult(){
-    return $("#results_panel").html();
+function isCalculatorReset() {
+    return firstNumber === null && secondNumber === null
+        && operator === null;
+}
+
+function isDifferentFromZero(value) {
+    return !isNaN(value) && Number(value) !== 0;
+}
+
+function addTypedDigit(value) {
+    var val = extractValue(value);
+    if (isUserIntroducingFirstNumber()) {
+        firstNumber = getNewNumberValue(firstNumber, val);
+        ui.setResult(firstNumber);
+    } else {
+        secondNumber = getNewNumberValue(secondNumber, val);
+        ui.setResult(secondNumber);
+    }
+}
+
+function performOperation() {
+    if (operator === operators.PLUS)
+        ui.setResult(sum(firstNumber, secondNumber));
+    else if (operator === operators.MINUS)
+        ui.setResult(substract(firstNumber, secondNumber));
+    else if (operator === operators.TIMES)
+        ui.setResult(times(firstNumber, secondNumber));
+    else if (operator === operators.DIVISION)
+        ui.setResult(div(firstNumber, secondNumber));
 }
 
 function act(value, actionType) {
     if (actionType === actionTypes.TYPING_DIGIT) {
-        var val = extractValue(value);
-        if (operator === null && secondNumber === null) {
-            firstNumber = getNewNumberValue(firstNumber, val);
-            setResult(firstNumber);
-        } else {
-            secondNumber = getNewNumberValue(secondNumber, val);
-            setResult(secondNumber);
-        }
-
+        addTypedDigit(value);
     } else if (actionType === actionTypes.SETTING_OPERATION) {
-        var currentResult = getResult();
-        if (firstNumber === null && secondNumber === null
-            && operator === null && !isNaN(currentResult) && Number(currentResult) !== 0) {
-            act(Number(currentResult), actionTypes.TYPING_DIGIT);
-        }
+        var result = ui.getResult();
+        if (isCalculatorReset() && isDifferentFromZero(result))
+            act(Number(result), actionTypes.TYPING_DIGIT);
         operator = value;
     } else if (actionType === actionTypes.CLEAR) {
         resetOperation();
-        setResult(0);
+        ui.setResult(0);
     } else if (actionType === actionTypes.CALCULATE) {
-        if (operator === operators.PLUS)
-            setResult(sum(firstNumber, secondNumber));
-        else if (operator === operators.MINUS)
-            setResult(substract(firstNumber, secondNumber));
-        else if (operator === operators.TIMES)
-            setResult(times(firstNumber, secondNumber));
-        else if (operator === operators.DIVISION)
-            setResult(div(firstNumber, secondNumber));
-
+        performOperation();
         resetOperation();
     }
-    
+
 }
 
 function sum(firstNum, secondNum) {
@@ -83,7 +94,7 @@ function extractValue(value) {
     return val;
 }
 
-function getNewNumberValue(currentNumber, newValue){
+function getNewNumberValue(currentNumber, newValue) {
     var v = null;
     if (currentNumber === null)
         v = newValue;
@@ -94,58 +105,12 @@ function getNewNumberValue(currentNumber, newValue){
     return v;
 }
 
-function addOnNumberClickedListener(buttonId, value){
-    $("#" + buttonId).click(function() {
-        act(value, actionTypes.TYPING_DIGIT);
-    });
+function setOperation(value) {
+    act(value, actionTypes.SETTING_OPERATION);
 }
 
-function addOnOperationClickedListener(operatorId, value) {
-    $("#" + operatorId).click(function() {
-        act(value, actionTypes.SETTING_OPERATION);
-    });
-}
-
-function setActionsForNumbers() {
-    var numbersMap = [
-        {key: 'zero_button', value: 0},
-        {key: 'one_button', value: 1},
-        {key: 'two_button', value: 2},
-        {key: 'three_button', value: 3},
-        {key: 'four_button', value: 4},
-        {key: 'five_button', value: 5},
-        {key: 'six_button', value: 6},
-        {key: 'seven_button', value: 7},
-        {key: 'eight_button', value: 8},
-        {key: 'nine_button', value: 9}
-    ];
-    for (i = 0; i < numbersMap.length; i++) {
-        addOnNumberClickedListener(numbersMap[i].key, numbersMap[i].value);
-    }
-}
-
-function setActionsForOperators() {
-    var operatorsMap = [
-        {key: 'plus_button', value: operators.PLUS},
-        {key: 'minus_button', value: operators.MINUS},
-        {key: 'multiplication_button', value: operators.TIMES},
-        {key: 'division_button', value: operators.DIVISION}
-    ];
-    for (i = 0; i < operatorsMap.length; i++) {
-        addOnOperationClickedListener(operatorsMap[i].key, operatorsMap[i].value);
-    }
-}
-
-function setActionForEquals(){
-    $("#equals_button").click(function() {
-        calculate();
-    });
-}
-
-function setActionForClear(){
-    $("#clear_button").click(function() {
-        clear();
-    });
+function typeDigit(value) {
+    act(value, actionTypes.TYPING_DIGIT);
 }
 
 function clear() {
@@ -162,17 +127,20 @@ function resetOperation() {
     operator = null;
 }
 
-function setActionForDotButton() {
-    $("#dot_button").click(function() {
-        act(".", actionTypes.TYPING_DIGIT);
+$(document).ready(function () {
+    ui.setActionsForNumbers(function (val) {
+        typeDigit(val)
     });
-}
-
-$(document).ready(function() {
-    setActionsForNumbers();
-    setActionsForOperators();
-    setActionForEquals();
-    setActionForClear();
-    setActionForDotButton();
+    ui.setActionsForOperators(function (val) {
+        setOperation(val);
+    });
+    ui.setActionForEquals(function () {
+        calculate();
+    });
+    ui.setActionForClear(function () {
+        clear();
+    });
+    ui.setActionForDotButton(function () {
+        typeDigit(".");
+    });
 });
-

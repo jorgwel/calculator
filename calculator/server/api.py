@@ -21,3 +21,8 @@ def serve_jquery():
 @app.route('/big.min.js')
 def serve_jquery():
     return static_file('big.min.js', root='static/')
+
+
+@app.route('/ui.js')
+def serve_jquery():
+    return static_file('ui.js', root='static/')
