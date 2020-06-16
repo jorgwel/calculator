@@ -31,3 +31,8 @@ def serve_jquery():
 @app.route('/math.operations.js')
 def serve_jquery():
     return static_file('math.operations.js', root='static/')
+
+
+@app.route('/operation.js')
+def serve_jquery():
+    return static_file('operation.js', root='static/')

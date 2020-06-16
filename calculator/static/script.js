@@ -1,6 +1,3 @@
-var firstNumber = null;
-var secondNumber = null;
-var operator = null;
 var actionTypes = {
     TYPING_DIGIT: 'TYPING_DIGIT',
     SETTING_OPERATION: 'SETTING_OPERATION',
@@ -8,119 +5,123 @@ var actionTypes = {
     CLEAR: 'CLEAR'
 };
 
-var operators = {PLUS: '+', MINUS: '-', TIMES: '*', DIVISION: '/'};
+var operators = { PLUS: '+', MINUS: '-', TIMES: '*', DIVISION: '/' };
 var ui = new Ui();
 var math = new MathOperations();
+var o = new Operation();
 
-function isUserIntroducingFirstNumber() {
-    return operator === null && secondNumber === null;
+function isDifferentFromZero( value ) {
+    return Number( value ) !== 0;
 }
 
-function isCalculatorReset() {
-    return firstNumber === null && secondNumber === null
-        && operator === null;
-}
-
-function isDifferentFromZero(value) {
-    return !isNaN(value) && Number(value) !== 0;
-}
-
-function addTypedDigit(value) {
-    var val = extractValue(value);
-    if (isUserIntroducingFirstNumber()) {
-        firstNumber = getNewNumberValue(firstNumber, val);
-        ui.setResult(firstNumber);
+function addTypedDigit( value ) {
+    var val = extractValue( value );
+    if ( o.getCurrentState() === operationState.CAPTURING_FIRST_NUMBER ) {
+        o.firstNumber = getNewNumberValue( o.firstNumber, val );
+        ui.setResult( o.firstNumber );
     } else {
-        secondNumber = getNewNumberValue(secondNumber, val);
-        ui.setResult(secondNumber);
+        o.secondNumber = getNewNumberValue( o.secondNumber, val );
+        ui.setResult( o.secondNumber );
     }
 }
 
-function performOperation() {
-    if (operator === operators.PLUS)
-        ui.setResult(math.sum(firstNumber, secondNumber));
-    else if (operator === operators.MINUS)
-        ui.setResult(math.substract(firstNumber, secondNumber));
-    else if (operator === operators.TIMES)
-        ui.setResult(math.times(firstNumber, secondNumber));
-    else if (operator === operators.DIVISION)
-        ui.setResult(math.div(firstNumber, secondNumber));
+function performOperation( op ) {
+    let oper = op.operator;
+    let first = op.firstNumber;
+    let second = op.secondNumber;
+    if ( oper === operators.PLUS )
+        ui.setResult( math.sum( first, second ) );
+    else if ( oper === operators.MINUS )
+        ui.setResult( math.substract( first, second ) );
+    else if ( oper === operators.TIMES )
+        ui.setResult( math.times( first, second ) );
+    else if ( oper === operators.DIVISION )
+        ui.setResult( math.div( first, second ) );
 }
 
-function act(value, actionType) {
-    if (actionType === actionTypes.TYPING_DIGIT) {
-        addTypedDigit(value);
-    } else if (actionType === actionTypes.SETTING_OPERATION) {
-        var result = ui.getResult();
-        if (isCalculatorReset() && isDifferentFromZero(result))
-            act(Number(result), actionTypes.TYPING_DIGIT);
-        operator = value;
-    } else if (actionType === actionTypes.CLEAR) {
-        resetOperation();
-        ui.setResult(0);
-    } else if (actionType === actionTypes.CALCULATE) {
-        performOperation();
-        resetOperation();
+function setResultAsFirstOperatorIfOperationResetAndResultDifferentFromZero() {
+    var result = ui.getResult();
+    if ( o.isReset() && isDifferentFromZero( result ) )
+        act( Number( result ), actionTypes.TYPING_DIGIT );
+}
+
+function setOperator( value ) {
+    setResultAsFirstOperatorIfOperationResetAndResultDifferentFromZero();
+    o.operator = value;
+}
+
+function act( value, actionType ) {
+    if ( actionType === actionTypes.TYPING_DIGIT ) {
+        addTypedDigit( value );
+    } else if ( actionType === actionTypes.SETTING_OPERATION ) {
+        setOperator( value );
+    } else if ( actionType === actionTypes.CLEAR ) {
+        o.resetOperation();
+        ui.setResult( 0 );
+    } else if ( actionType === actionTypes.CALCULATE ) {
+        performOperation( o );
+        o.resetOperation();
     }
 
 }
 
-function extractValue(value) {
-    var val = null;
-    if (value === '.')
-        val = value;
-    else
-        val = Number(value);
-    return val;
+function extractValue( value ) {
+    return value === '.' ? value : Number( value );
 }
 
-function getNewNumberValue(currentNumber, newValue) {
-    var v = null;
-    if (currentNumber === null)
-        v = newValue;
-    else if (newValue === '.' && String(currentNumber).indexOf(".") >= 0)
-        v = String(currentNumber);
-    else
-        v = String(currentNumber) + String(newValue);
-    return v;
+function containsADot( currentNumber ) {
+    return String( currentNumber ).indexOf( "." ) >= 0;
 }
 
-function setOperation(value) {
-    act(value, actionTypes.SETTING_OPERATION);
+function isUserTryingToAddADoubleDot( newValue, currentNumber ) {
+    return newValue === '.' && containsADot( currentNumber );
 }
 
-function typeDigit(value) {
-    act(value, actionTypes.TYPING_DIGIT);
+function isFirstValueForNumber( currentNumber ) {
+    return currentNumber === null;
+}
+
+function joinCurrentAndNewValues( currentNumber, newValue ) {
+    return String( currentNumber ) + String( newValue );
+}
+
+function getNewNumberValue( currentNumber, newValue ) {
+    return isFirstValueForNumber( currentNumber ) ? newValue
+        : isUserTryingToAddADoubleDot( newValue, currentNumber ) ? String( currentNumber )
+            : joinCurrentAndNewValues( currentNumber, newValue );
+}
+
+function setOperation( value ) {
+    act( value, actionTypes.SETTING_OPERATION );
+}
+
+function typeDigit( value ) {
+    act( value, actionTypes.TYPING_DIGIT );
 }
 
 function clear() {
-    act('C', actionTypes.CLEAR);
+    act( 'C', actionTypes.CLEAR );
 }
 
 function calculate() {
-    act('=', actionTypes.CALCULATE);
+    act( '=', actionTypes.CALCULATE );
 }
 
-function resetOperation() {
-    firstNumber = null;
-    secondNumber = null;
-    operator = null;
-}
 
-$(document).ready(function () {
-    ui.setActionsForNumbers(function (val) {
-        typeDigit(val)
-    });
-    ui.setActionsForOperators(function (val) {
-        setOperation(val);
-    });
-    ui.setActionForEquals(function () {
+$( document ).ready( function () {
+    ui.setActionsForNumbers( function ( val ) {
+        typeDigit( val )
+    } );
+    ui.setActionsForOperators( function ( val ) {
+        setOperation( val );
+    } );
+    ui.setActionForEquals( function () {
         calculate();
-    });
-    ui.setActionForClear(function () {
+    } );
+    ui.setActionForClear( function () {
         clear();
-    });
-    ui.setActionForDotButton(function () {
-        typeDigit(".");
-    });
-});
+    } );
+    ui.setActionForDotButton( function () {
+        typeDigit( "." );
+    } );
+} );
