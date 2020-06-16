@@ -2,18 +2,18 @@ import threading
 import unittest
 
 from selenium import webdriver
-
 from server.api import app
 from server.server import Server
 
 HOME = "http://localhost:3000"
 RESULTS_PANEL_ID = 'results_panel'
-OPERATIONS = ['plus_button', 'minus_button', 'multiplication_button',
-              'division_button', 'clear_button', 'equals_button']
-NUMBERS = ['zero_button', 'one_button', 'two_button',
-           'three_button', 'four_button', 'five_button',
-           'six_button', 'seven_button', 'eight_button',
-           'nine_button', 'dot_button']
+OPERATIONS = {'+': 'plus_button', '-': 'minus_button', '*': 'multiplication_button',
+              '/': 'division_button', 'C': 'clear_button', '=': 'equals_button'}
+NUMBERS = {'0': 'zero_button', '1': 'one_button', '2': 'two_button',
+           '3': 'three_button', '4': 'four_button', '5': 'five_button',
+           '6': 'six_button', '7': 'seven_button', '8': 'eight_button',
+           '9': 'nine_button', '.': 'dot_button'}
+ALL_BUTTONS = { **OPERATIONS, **NUMBERS }
 
 
 class CalculatorActions(unittest.TestCase):
@@ -37,7 +37,7 @@ class CalculatorActions(unittest.TestCase):
 
     def setUp(self):
         print("Testing", self._testMethodName)
-        self.click("clear_button")
+        self.click("C")
 
     def test_calculator_exists(self):
         for id in self.get_calculator_elements_ids():
@@ -45,177 +45,120 @@ class CalculatorActions(unittest.TestCase):
         assert self.get_result() == '0'
 
     def test_five_plus_five_shows_ten_in_result_panel(self):
-        self.click("five_button")
-        assert self.get_result() == '5'
-        self.click("plus_button")
-        self.click("five_button")
-        assert self.get_result() == '5'
-        self.click("equals_button")
-        assert self.get_result() == '10'
+        self.checkClicks([
+            ["5", "5"],
+            ["+", "5"],
+            ["5", "5"],
+            ["=", "10"]
+        ])
 
     def test_user_can_repeatedly_click_on_equals(self):
-        self.click("one_button")
-        assert self.get_result() == '1'
-        self.click("zero_button")
-        assert self.get_result() == '10'
-        self.click("equals_button")
-        assert self.get_result() == '10'
-        self.click("equals_button")
-        assert self.get_result() == '10'
+        self.checkClicks([
+            ["1", "1"],
+            ["0", "10"],
+            ["=", "10"],
+            ["=", "10"]
+        ])
 
     def test_five_then_five_shows_fifty_five_in_result_panel(self):
-        self.click("five_button")
-        assert self.get_result() == '5'
-        self.click("five_button")
-        assert self.get_result() == '55'
-        self.click("equals_button")
-        assert self.get_result() == '55'
+        self.checkClicks([
+            ["5", "5"],
+            ["5", "55"],
+            ["=", "55"]
+        ])
 
     def test_zero_plus_seventeen(self):
-        self.click("zero_button")
-        assert self.get_result() == '0'
-        self.click("plus_button")
-        assert self.get_result() == '0'
-        self.click("one_button")
-        assert self.get_result() == '1'
-        self.click("seven_button")
-        assert self.get_result() == '17'
-        self.click("equals_button")
-        assert self.get_result() == '17'
+        self.checkClicks([
+            ["0", "0"],
+            ["+", "0"],
+            ["1", "1"],
+            ["7", "17"],
+            ["=", "17"]
+        ])
 
     def test_zero_minus_three(self):
-        self.click("zero_button")
-        assert self.get_result() == '0'
-        self.click("minus_button")
-        assert self.get_result() == '0'
-        self.click("three_button")
-        assert self.get_result() == '3'
-        self.click("equals_button")
-        assert self.get_result() == '-3'
+        self.checkClicks([
+            ["0", "0"],
+            ["-", "0"],
+            ["3", "3"],
+            ["=", "-3"]
+        ])
 
     def test_zero_dot_two_plus_three_dot_seven(self):
-        self.click("zero_button")
-        assert self.get_result() == '0'
-        self.click("dot_button")
-        assert self.get_result() == '0.'
-        self.click("two_button")
-        assert self.get_result() == '0.2'
-        self.click("plus_button")
-        assert self.get_result() == '0.2'
-        self.click("three_button")
-        assert self.get_result() == '3'
-        self.click("dot_button")
-        assert self.get_result() == '3.'
-        self.click("seven_button")
-        assert self.get_result() == '3.7'
-        self.click("equals_button")
-        assert self.get_result() == '3.9'
+        self.checkClicks([
+            ["0", "0"],
+            [".", "0."],
+            ["2", "0.2"],
+            ["+", "0.2"],
+            ["3", "3"],
+            [".", "3."],
+            ["7", "3.7"],
+            ["=", "3.9"]
+        ])
 
     def test_zero_dot_two_times_three_dot_seven(self):
-        self.click("zero_button")
-        assert self.get_result() == '0'
-        self.click("dot_button")
-        assert self.get_result() == '0.'
-        self.click("two_button")
-        assert self.get_result() == '0.2'
-        self.click("multiplication_button")
-        assert self.get_result() == '0.2'
-        self.click("three_button")
-        assert self.get_result() == '3'
-        self.click("dot_button")
-        assert self.get_result() == '3.'
-        self.click("seven_button")
-        assert self.get_result() == '3.7'
-        self.click("equals_button")
-        assert self.get_result() == '0.74'
-
-    def test_zero_dot_two_times_three_dot_seven(self):
-        self.click("zero_button")
-        assert self.get_result() == '0'
-        self.click("dot_button")
-        assert self.get_result() == '0.'
-        self.click("two_button")
-        assert self.get_result() == '0.2'
-        self.click("multiplication_button")
-        assert self.get_result() == '0.2'
-        self.click("three_button")
-        assert self.get_result() == '3'
-        self.click("dot_button")
-        assert self.get_result() == '3.'
-        self.click("seven_button")
-        assert self.get_result() == '3.7'
-        self.click("equals_button")
-        assert self.get_result() == '0.74'
+        self.checkClicks([
+            ["0", "0"],
+            [".", "0."],
+            ["2", "0.2"],
+            ["*", "0.2"],
+            ["3", "3"],
+            [".", "3."],
+            ["7", "3.7"],
+            ["=", "0.74"]
+        ])
 
     def test_one_dot_five_divided_by_two(self):
-        self.click("one_button")
-        assert self.get_result() == '1'
-        self.click("dot_button")
-        assert self.get_result() == '1.'
-        self.click("five_button")
-        assert self.get_result() == '1.5'
-        self.click("division_button")
-        assert self.get_result() == '1.5'
-        self.click("two_button")
-        assert self.get_result() == '2'
-        self.click("equals_button")
-        assert self.get_result() == '0.75'
+        self.checkClicks([
+            ["1", "1"],
+            [".", "1."],
+            ["5", "1.5"],
+            ["/", "1.5"],
+            ["2", "2"],
+            ["=", "0.75"]
+        ])
 
     def test_one_dot_five_minus_one_dot_three(self):
-        self.click("one_button")
-        assert self.get_result() == '1'
-        self.click("dot_button")
-        assert self.get_result() == '1.'
-        self.click("five_button")
-        assert self.get_result() == '1.5'
-        self.click("minus_button")
-        self.click("one_button")
-        assert self.get_result() == '1'
-        self.click("dot_button")
-        assert self.get_result() == '1.'
-        self.click("three_button")
-        assert self.get_result() == '1.3'
-        self.click("equals_button")
-        assert self.get_result() == '0.2'
+        self.checkClicks([
+            ["1", "1"],
+            [".", "1."],
+            ["5", "1.5"],
+            ["-", "1.5"],
+            ["1", "1"],
+            [".", "1."],
+            ["3", "1.3"],
+            ["=", "0.2"]
+        ])
 
     def test_user_can_start_a_new_chain_of_operations(self):
-        self.click("five_button")
-        assert self.get_result() == '5'
-        self.click("plus_button")
-        self.click("five_button")
-        assert self.get_result() == '5'
-        self.click("equals_button")
-        assert self.get_result() == '10'
-        self.click("equals_button")
-        assert self.get_result() == '10'
-        self.click("plus_button")
-        assert self.get_result() == '10'
-        self.click("nine_button")
-        assert self.get_result() == '9'
-        self.click("equals_button")
-        assert self.get_result() == '19'
+        self.checkClicks([
+            ["5", "5"],
+            ["+", "5"],
+            ["5", "5"],
+            ["=", "10"],
+            ["=", "10"],
+            ["+", "10"],
+            ["9", "9"],
+            ["=", "19"]
+        ])
 
     def test_user_can_type_only_one_dot(self):
-        self.click("one_button")
-        assert self.get_result() == '1'
-        self.click("dot_button")
-        assert self.get_result() == '1.'
-        self.click("dot_button")
-        assert self.get_result() == '1.'
-        self.click("five_button")
-        assert self.get_result() == '1.5'
-        self.click("division_button")
-        assert self.get_result() == '1.5'
-        self.click("two_button")
-        assert self.get_result() == '2'
-        self.click("equals_button")
-        assert self.get_result() == '0.75'
+        self.checkClicks([
+            ["1", "1"],
+            [".", "1."],
+            [".", "1."],
+            [".", "1."],
+            ["5", "1.5"],
+            ["/", "1.5"],
+            ["2", "2"],
+            ["=", "0.75"]
+        ])
 
     def get_result(self):
         return self.get_text(RESULTS_PANEL_ID)
 
-    def click(self, button_id):
-        self.driver.find_element_by_id(button_id).click()
+    def click(self, button):
+        self.driver.find_element_by_id(ALL_BUTTONS[button]).click()
 
     def get_text(self, id):
         return self.driver.find_element_by_id(id).text
@@ -224,7 +167,14 @@ class CalculatorActions(unittest.TestCase):
         assert len(driver.find_elements_by_id(id)) == 1
 
     def get_calculator_elements_ids(self):
-        return OPERATIONS + NUMBERS + [RESULTS_PANEL_ID]
+        return list(OPERATIONS.values()) + list(NUMBERS.values()) + [RESULTS_PANEL_ID]
+
+    def checkClicks(self, clicks):
+        for c in clicks:
+            button = c[0]
+            expected = c[1]
+            self.click(button)
+            assert self.get_result() == expected
 
 
 if __name__ == "__main__":
