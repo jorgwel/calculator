@@ -195,6 +195,22 @@ class CalculatorActions(unittest.TestCase):
         self.click("equals_button")
         assert self.get_result() == '19'
 
+    def test_user_can_type_only_one_dot(self):
+        self.click("one_button")
+        assert self.get_result() == '1'
+        self.click("dot_button")
+        assert self.get_result() == '1.'
+        self.click("dot_button")
+        assert self.get_result() == '1.'
+        self.click("five_button")
+        assert self.get_result() == '1.5'
+        self.click("division_button")
+        assert self.get_result() == '1.5'
+        self.click("two_button")
+        assert self.get_result() == '2'
+        self.click("equals_button")
+        assert self.get_result() == '0.75'
+
     def get_result(self):
         return self.get_text(RESULTS_PANEL_ID)
 

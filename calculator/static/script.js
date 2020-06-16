@@ -21,15 +21,9 @@ function act(value, actionType) {
     if (actionType === actionTypes.TYPING_DIGIT) {
         var val = extractValue(value);
         if (operator === null && secondNumber === null) {
-
             firstNumber = getNewNumberValue(firstNumber, val);
             setResult(firstNumber);
         } else {
-            var val = null;
-            if (value === '.')
-                val = value;
-            else if (!isNaN(value))
-                val = Number(value);
             secondNumber = getNewNumberValue(secondNumber, val);
             setResult(secondNumber);
         }
@@ -93,6 +87,8 @@ function getNewNumberValue(currentNumber, newValue){
     var v = null;
     if (currentNumber === null)
         v = newValue;
+    else if (newValue === '.' && String(currentNumber).indexOf(".") >= 0)
+        v = String(currentNumber);
     else
         v = String(currentNumber) + String(newValue);
     return v;
