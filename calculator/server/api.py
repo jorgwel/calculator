@@ -37,6 +37,12 @@ def serve_jquery():
 def serve_jquery():
     return static_file('operation.js', root='static/')
 
+
 @app.route('/calculatorEngine.js')
 def serve_jquery():
     return static_file('calculatorEngine.js', root='static/')
+
+
+@app.route('/calculatorOuterBox.js')
+def serve_jquery():
+    return static_file('calculatorOuterBox.js', root='static/')
