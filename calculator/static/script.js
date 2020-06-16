@@ -9,20 +9,11 @@ var operators = { PLUS: '+', MINUS: '-', TIMES: '*', DIVISION: '/' };
 var ui = new Ui();
 var math = new MathOperations();
 var o = new Operation();
+let cb = new CalculatorOuterBox();
+var e = new CalculatorEngine(cb);
 
 function isDifferentFromZero( value ) {
     return Number( value ) !== 0;
-}
-
-function addTypedDigit( value ) {
-    var val = extractValue( value );
-    if ( o.getCurrentState() === operationState.CAPTURING_FIRST_NUMBER ) {
-        o.firstNumber = getNewNumberValue( o.firstNumber, val );
-        ui.setResult( o.firstNumber );
-    } else {
-        o.secondNumber = getNewNumberValue( o.secondNumber, val );
-        ui.setResult( o.secondNumber );
-    }
 }
 
 function performOperation( op ) {
@@ -42,27 +33,7 @@ function performOperation( op ) {
 function setResultAsFirstOperatorIfOperationResetAndResultDifferentFromZero() {
     var result = ui.getResult();
     if ( o.isReset() && isDifferentFromZero( result ) )
-        act( Number( result ), actionTypes.TYPING_DIGIT );
-}
-
-function setOperator( value ) {
-    setResultAsFirstOperatorIfOperationResetAndResultDifferentFromZero();
-    o.operator = value;
-}
-
-function act( value, actionType ) {
-    if ( actionType === actionTypes.TYPING_DIGIT ) {
-        addTypedDigit( value );
-    } else if ( actionType === actionTypes.SETTING_OPERATION ) {
-        setOperator( value );
-    } else if ( actionType === actionTypes.CLEAR ) {
-        o.resetOperation();
-        ui.setResult( 0 );
-    } else if ( actionType === actionTypes.CALCULATE ) {
-        performOperation( o );
-        o.resetOperation();
-    }
-
+        e.act( Number( result ), actionTypes.TYPING_DIGIT );
 }
 
 function extractValue( value ) {
@@ -91,37 +62,46 @@ function getNewNumberValue( currentNumber, newValue ) {
             : joinCurrentAndNewValues( currentNumber, newValue );
 }
 
-function setOperation( value ) {
-    act( value, actionTypes.SETTING_OPERATION );
+function CalculatorOuterBox() {
 }
 
-function typeDigit( value ) {
-    act( value, actionTypes.TYPING_DIGIT );
+CalculatorOuterBox.prototype.addTypedDigit = function ( value ) {
+    var val = extractValue( value );
+    if ( o.getCurrentState() === operationState.CAPTURING_FIRST_NUMBER ) {
+        o.firstNumber = getNewNumberValue( o.firstNumber, val );
+        ui.setResult( o.firstNumber );
+    } else {
+        o.secondNumber = getNewNumberValue( o.secondNumber, val );
+        ui.setResult( o.secondNumber );
+    }
 }
-
-function clear() {
-    act( 'C', actionTypes.CLEAR );
+CalculatorOuterBox.prototype.setOperator = function ( value ) {
+    setResultAsFirstOperatorIfOperationResetAndResultDifferentFromZero();
+    o.operator = value;
 }
-
-function calculate() {
-    act( '=', actionTypes.CALCULATE );
+CalculatorOuterBox.prototype.clearCalculator = function () {
+    o.resetOperation();
+    ui.setResult( 0 );
 }
-
+CalculatorOuterBox.prototype.calculateAndReset = function () {
+    performOperation( o );
+    o.resetOperation();
+}
 
 $( document ).ready( function () {
     ui.setActionsForNumbers( function ( val ) {
-        typeDigit( val )
+        e.typeDigit( val )
     } );
     ui.setActionsForOperators( function ( val ) {
-        setOperation( val );
+        e.setOperation( val );
     } );
     ui.setActionForEquals( function () {
-        calculate();
+        e.calculate();
     } );
     ui.setActionForClear( function () {
-        clear();
+        e.clear();
     } );
     ui.setActionForDotButton( function () {
-        typeDigit( "." );
+        e.typeDigit( "." );
     } );
 } );
