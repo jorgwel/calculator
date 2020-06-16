@@ -23,11 +23,6 @@ def serve_jquery():
     return static_file('big.min.js', root='static/')
 
 
-@app.route('/ui.js')
-def serve_jquery():
-    return static_file('ui.js', root='static/')
-
-
 @app.route('/alu.js')
 def serve_jquery():
     return static_file('alu.js', root='static/')

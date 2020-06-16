@@ -1,32 +1,23 @@
-var actionTypes = {
-    TYPING_DIGIT: 'TYPING_DIGIT',
-    SETTING_OPERATION: 'SETTING_OPERATION',
-    CALCULATE: 'CALCULATE',
-    CLEAR: 'CLEAR'
-};
-
-var operators = { PLUS: '+', MINUS: '-', TIMES: '*', DIVISION: '/' };
-var ui = new Ui();
-var math = new Alu();
 var o = new Operation();
-var box = new CalculatorOuterBox( ui.setResult, ui.getResult );
+var alu = new Alu();
 var numBuilder = new NumberBuilder();
-var e = new CalculatorEngine( o, math, numBuilder, box );
+var box = new CalculatorOuterBox();
+var e = new CalculatorEngine( o, alu, numBuilder, box.getResult, box.setResult );
 
 $( document ).ready( function () {
-    ui.setActionsForNumbers( function ( val ) {
+    box.setActionsForNumbers( function ( val ) {
         e.typeDigit( val )
     } );
-    ui.setActionsForOperators( function ( val ) {
+    box.setActionsForOperators( function ( val ) {
         e.setOperation( val );
     } );
-    ui.setActionForEquals( function () {
+    box.setActionForEquals( function () {
         e.calculate();
     } );
-    ui.setActionForClear( function () {
+    box.setActionForClear( function () {
         e.clear();
     } );
-    ui.setActionForDotButton( function () {
+    box.setActionForDotButton( function () {
         e.typeDigit( "." );
     } );
 } );

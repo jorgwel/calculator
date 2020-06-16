@@ -1,3 +1,5 @@
+var operators = { PLUS: '+', MINUS: '-', TIMES: '*', DIVISION: '/' };
+
 function Alu() {
 }
 

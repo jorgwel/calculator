@@ -1,8 +1,16 @@
-function CalculatorEngine( operation, alu, numberBuilder, calculatorBox ) {
+var actionTypes = {
+    TYPING_DIGIT: 'TYPING_DIGIT',
+    SETTING_OPERATION: 'SETTING_OPERATION',
+    CALCULATE: 'CALCULATE',
+    CLEAR: 'CLEAR'
+};
+
+function CalculatorEngine( operation, alu, numberBuilder, getResultFn, setResultFn ) {
     this.o = operation;
     this.alu = alu;
     this.numberBuilder = numberBuilder;
-    this.box = calculatorBox;
+    this.getResult = getResultFn;
+    this.setResult = setResultFn;
 }
 
 CalculatorEngine.prototype.setOperation = function ( value ) {
@@ -33,10 +41,10 @@ CalculatorEngine.prototype.setNewValueOnField = function ( value ) {
     var val = this.extractValue( value );
     if ( this.o.getCurrentState() === operationState.CAPTURING_FIRST_NUMBER ) {
         this.o.firstNumber = this.numberBuilder.getNewNumberValue( this.o.firstNumber, val );
-        this.box.display( this.o.firstNumber );
+        this.setResult( this.o.firstNumber );
     } else {
         this.o.secondNumber = this.numberBuilder.getNewNumberValue( this.o.secondNumber, val );
-        this.box.display( this.o.secondNumber );
+        this.setResult( this.o.secondNumber );
     }
 }
 
@@ -44,16 +52,16 @@ CalculatorEngine.prototype.act = function ( value, actionType ) {
     if ( actionType === actionTypes.TYPING_DIGIT ) {
         this.setNewValueOnField( value );
     } else if ( actionType === actionTypes.SETTING_OPERATION ) {
-        var result = this.box.getValueInDisplay();
+        var result = this.getResult();
         if ( o.isReset() && this.isDifferentFromZero( result ) )
             this.typeDigit( result );
         this.o.operator = value;
     } else if ( actionType === actionTypes.CLEAR ) {
         this.o.resetOperation();
-        this.box.display( 0 );
+        this.setResult( 0 );
     } else if ( actionType === actionTypes.CALCULATE ) {
         var r = this.alu.performOperation( this.o );
-        this.box.display( r );
+        this.setResult( r );
         this.o.resetOperation();
     }
 }
