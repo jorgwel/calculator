@@ -26,3 +26,8 @@ def serve_jquery():
 @app.route('/ui.js')
 def serve_jquery():
     return static_file('ui.js', root='static/')
+
+
+@app.route('/math.operations.js')
+def serve_jquery():
+    return static_file('math.operations.js', root='static/')

@@ -10,6 +10,7 @@ var actionTypes = {
 
 var operators = {PLUS: '+', MINUS: '-', TIMES: '*', DIVISION: '/'};
 var ui = new Ui();
+var math = new MathOperations();
 
 function isUserIntroducingFirstNumber() {
     return operator === null && secondNumber === null;
@@ -37,13 +38,13 @@ function addTypedDigit(value) {
 
 function performOperation() {
     if (operator === operators.PLUS)
-        ui.setResult(sum(firstNumber, secondNumber));
+        ui.setResult(math.sum(firstNumber, secondNumber));
     else if (operator === operators.MINUS)
-        ui.setResult(substract(firstNumber, secondNumber));
+        ui.setResult(math.substract(firstNumber, secondNumber));
     else if (operator === operators.TIMES)
-        ui.setResult(times(firstNumber, secondNumber));
+        ui.setResult(math.times(firstNumber, secondNumber));
     else if (operator === operators.DIVISION)
-        ui.setResult(div(firstNumber, secondNumber));
+        ui.setResult(math.div(firstNumber, secondNumber));
 }
 
 function act(value, actionType) {
@@ -63,27 +64,6 @@ function act(value, actionType) {
     }
 
 }
-
-function sum(firstNum, secondNum) {
-    return new Big(toNumber(firstNum)).plus(toNumber(secondNum)).toString();
-}
-
-function times(firstNum, secondNum) {
-    return new Big(toNumber(firstNum)).times(toNumber(secondNum)).toString();
-}
-
-function div(firstNum, secondNum) {
-    return new Big(toNumber(firstNum)).div(toNumber(secondNum)).toString();
-}
-
-function substract(firstNum, secondNum) {
-    return new Big(toNumber(firstNum)).minus(toNumber(secondNum)).toString();
-}
-
-function toNumber(str) {
-    return Number(str);
-}
-
 
 function extractValue(value) {
     var val = null;
