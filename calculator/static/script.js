@@ -10,7 +10,8 @@ var ui = new Ui();
 var math = new MathOperations();
 var o = new Operation();
 var box = new CalculatorOuterBox(ui.setResult, ui.getResult);
-var e = new CalculatorEngine(o, math, box);
+var numBuilder = new NumberBuilder();
+var e = new CalculatorEngine(o, math, numBuilder, box);
 
 $( document ).ready( function () {
     ui.setActionsForNumbers( function ( val ) {

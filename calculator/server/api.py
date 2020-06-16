@@ -46,3 +46,8 @@ def serve_jquery():
 @app.route('/calculatorOuterBox.js')
 def serve_jquery():
     return static_file('calculatorOuterBox.js', root='static/')
+
+
+@app.route('/numberBuilder.js')
+def serve_jquery():
+    return static_file('numberBuilder.js', root='static/')
