@@ -5,24 +5,25 @@ var actionTypes = {
     CLEAR: 'CLEAR'
 };
 
-function Screen(getResult, setResult) {
-    this.getResult = getResult;
-    this.setResult = setResult;
+function CalculatorScreen() {
+    this.getResult = null;
+    this.setResult = null;
     return this;
 }
 
-function EngineCircuits( operation, alu, numberBuilder) {
+function EngineCircuits( operation, alu, numberBuilder, screen) {
     this.operation = operation;
     this.alu = alu;
     this.numberBuilder = numberBuilder;
+    this.screen = screen;
     return this;
 }
 
-function CalculatorEngine( circuits, screen) {
+function CalculatorEngine( circuits) {
     this.o = circuits.operation;
     this.alu = circuits.alu;
     this.numberBuilder = circuits.numberBuilder;
-    this.screen = screen;
+    this.screen = circuits.screen;
 }
 
 CalculatorEngine.prototype.setOperation = function ( value ) {

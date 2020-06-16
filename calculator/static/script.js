@@ -4,28 +4,28 @@ function buildCalculatorBox() {
     return new CalculatorOuterBox();
 }
 
-function buildScreen(box) {
-    return new Screen( box.getResult, box.setResult );
-}
-
 function buildCalculatorCircuits() {
     var o = new Operation();
     var alu = new Alu();
     var numBuilder = new NumberBuilder();
-    var circuits = new EngineCircuits( o, alu, numBuilder )
+    var screen = new CalculatorScreen();
+    var circuits = new EngineCircuits( o, alu, numBuilder, screen)
     return circuits;
 }
 
-function buildEngine( circuits, screen ) {
-    return new CalculatorEngine( circuits, screen );
+function buildEngine( circuits) {
+    return new CalculatorEngine( circuits);
 }
 
+function connectBoxWithCircuits(calculatorBox, calculatorCircuits) {
+    calculatorCircuits.screen.setResult = calculatorBox.setResult;
+    calculatorCircuits.screen.getResult = calculatorBox.getResult;
+}
 var box = buildCalculatorBox();
-var screen = buildScreen(box);
 var circuits = buildCalculatorCircuits();
-var engine = buildEngine(circuits, screen);
+var engine = buildEngine(circuits);
 
-function connect( box, engine ) {
+function connectBoxWithEngine( box, engine ) {
     box.setActionsForNumbers( function ( val ) {
         engine.typeDigit( val )
     } );
@@ -44,5 +44,6 @@ function connect( box, engine ) {
 }
 
 $( document ).ready( function () {
-    connect(box, engine);
+    connectBoxWithCircuits(box, circuits);
+    connectBoxWithEngine(box, engine);
 } );
