@@ -28,9 +28,9 @@ def serve_jquery():
     return static_file('ui.js', root='static/')
 
 
-@app.route('/math.operations.js')
+@app.route('/alu.js')
 def serve_jquery():
-    return static_file('math.operations.js', root='static/')
+    return static_file('alu.js', root='static/')
 
 
 @app.route('/operation.js')

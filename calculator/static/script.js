@@ -7,11 +7,11 @@ var actionTypes = {
 
 var operators = { PLUS: '+', MINUS: '-', TIMES: '*', DIVISION: '/' };
 var ui = new Ui();
-var math = new MathOperations();
+var math = new Alu();
 var o = new Operation();
-var box = new CalculatorOuterBox(ui.setResult, ui.getResult);
+var box = new CalculatorOuterBox( ui.setResult, ui.getResult );
 var numBuilder = new NumberBuilder();
-var e = new CalculatorEngine(o, math, numBuilder, box);
+var e = new CalculatorEngine( o, math, numBuilder, box );
 
 $( document ).ready( function () {
     ui.setActionsForNumbers( function ( val ) {
