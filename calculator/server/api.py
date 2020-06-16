@@ -46,3 +46,8 @@ def serve_jquery():
 @app.route('/numberBuilder.js')
 def serve_jquery():
     return static_file('numberBuilder.js', root='static/')
+
+
+@app.route('/calculatorBuilder.js')
+def serve_jquery():
+    return static_file('calculatorBuilder.js', root='static/')
