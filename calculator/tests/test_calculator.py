@@ -1,39 +1,20 @@
-import threading
 import unittest
 
-from selenium import webdriver
-from server.api import app
-from server.server import Server
+from tests.server_test import ServerTest
 
 HOME = "http://localhost:3000"
 RESULTS_PANEL_ID = 'results_panel'
-OPERATIONS = {'+': 'plus_button', '-': 'minus_button', '*': 'multiplication_button',
-              '/': 'division_button', 'C': 'clear_button', '=': 'equals_button'}
+OPERATIONS = {'+': 'plus_button', '-': 'minus_button',
+              '*': 'multiplication_button', '/': 'division_button',
+              'C': 'clear_button', '=': 'equals_button'}
 NUMBERS = {'0': 'zero_button', '1': 'one_button', '2': 'two_button',
            '3': 'three_button', '4': 'four_button', '5': 'five_button',
            '6': 'six_button', '7': 'seven_button', '8': 'eight_button',
            '9': 'nine_button', '.': 'dot_button'}
-ALL_BUTTONS = { **OPERATIONS, **NUMBERS }
+ALL_BUTTONS = {**OPERATIONS, **NUMBERS}
 
 
-class CalculatorActions(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.driver = webdriver.Firefox()
-        cls.start_test_server()
-        cls.driver.get(HOME)
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.driver.close()
-        cls.server.stop()
-
-    @classmethod
-    def start_test_server(cls):
-        cls.server = Server(port=3000)
-        s = lambda: app.run(server=cls.server)
-        t = threading.Thread(target=s, args=())
-        t.start()
+class CalculatorActions(ServerTest):
 
     def setUp(self):
         print("Testing", self._testMethodName)
