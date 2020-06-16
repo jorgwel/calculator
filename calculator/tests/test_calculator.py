@@ -18,6 +18,8 @@ class CalculatorActions(ServerTest):
 
     def setUp(self):
         print("Testing", self._testMethodName)
+
+    def tearDown(self):
         self.click("C")
 
     def test_calculator_exists(self):

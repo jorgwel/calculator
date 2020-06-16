@@ -20,9 +20,9 @@ function Operation( firstNumber, secondNumber, operator ) {
 }
 
 Operation.prototype.isReset = function () {
-    return this.firstNumber === null
-        && this.secondNumber === null
-        && this.operator === null;
+    return (this.firstNumber === null || this.firstNumber === undefined)
+        && (this.secondNumber === null || this.secondNumber === undefined)
+        && (this.operator === null || this.operator === undefined)
 }
 
 Operation.prototype.resetOperation = function () {
@@ -43,10 +43,10 @@ Operation.prototype.getCurrentState = function () {
 }
 
 Operation.prototype.isUserIntroducingFirstNumber = function () {
-    return this.operator === null
-        && this.secondNumber === null;
+    return (this.operator === null || this.operator === undefined)
+        && (this.secondNumber === null || this.secondNumber === undefined);
 }
 
 Operation.prototype.isUserIntroducingOperator = function () {
-    return this.firstNumber !== null && this.secondNumber === null;
+    return (this.firstNumber !== null && this.firstNumber !== undefined) && (this.secondNumber === null || this.secondNumber === undefined);
 }

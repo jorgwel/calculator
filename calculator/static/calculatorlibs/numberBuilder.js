@@ -9,7 +9,7 @@ NumberBuilder.prototype.isUserTryingToAddADoubleDot = function ( newValue, curre
 }
 
 NumberBuilder.prototype.isFirstValueForNumber = function ( currentNumber ) {
-    return currentNumber === null;
+    return (currentNumber === null || currentNumber === undefined);
 }
 
 NumberBuilder.prototype.joinCurrentAndNewValues = function ( currentNumber, newValue ) {
