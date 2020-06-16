@@ -26,9 +26,9 @@ Operation.prototype.isReset = function () {
 }
 
 Operation.prototype.resetOperation = function () {
-    o.firstNumber = null;
-    o.secondNumber = null;
-    o.operator = null;
+    this.firstNumber = null;
+    this.secondNumber = null;
+    this.operator = null;
 }
 
 Operation.prototype.getCurrentState = function () {

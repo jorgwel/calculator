@@ -1,23 +1,48 @@
-var o = new Operation();
-var alu = new Alu();
-var numBuilder = new NumberBuilder();
-var box = new CalculatorOuterBox();
-var e = new CalculatorEngine( o, alu, numBuilder, box.getResult, box.setResult );
 
-$( document ).ready( function () {
+
+function buildCalculatorBox() {
+    return new CalculatorOuterBox();
+}
+
+function buildScreen(box) {
+    return new Screen( box.getResult, box.setResult );
+}
+
+function buildCalculatorCircuits() {
+    var o = new Operation();
+    var alu = new Alu();
+    var numBuilder = new NumberBuilder();
+    var circuits = new EngineCircuits( o, alu, numBuilder )
+    return circuits;
+}
+
+function buildEngine( circuits, screen ) {
+    return new CalculatorEngine( circuits, screen );
+}
+
+var box = buildCalculatorBox();
+var screen = buildScreen(box);
+var circuits = buildCalculatorCircuits();
+var engine = buildEngine(circuits, screen);
+
+function connect( box, engine ) {
     box.setActionsForNumbers( function ( val ) {
-        e.typeDigit( val )
+        engine.typeDigit( val )
     } );
     box.setActionsForOperators( function ( val ) {
-        e.setOperation( val );
+        engine.setOperation( val );
     } );
     box.setActionForEquals( function () {
-        e.calculate();
+        engine.calculate();
     } );
     box.setActionForClear( function () {
-        e.clear();
+        engine.clear();
     } );
     box.setActionForDotButton( function () {
-        e.typeDigit( "." );
+        engine.typeDigit( "." );
     } );
+}
+
+$( document ).ready( function () {
+    connect(box, engine);
 } );
