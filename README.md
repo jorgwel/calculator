@@ -2,19 +2,29 @@
 This is a classic calculator which is displayed on a web page. It has a small backend in python **bottle** to deliver static files. Uses **big.js** for calculations. 
 
 # How to start?
-### 0. Get latest geckodriver for Firefox
-a. Download gecko driver from here: https://github.com/mozilla/geckodriver/releases
 
-b. Put `geckodriver` file in `/usr/bin` (or somewhere in your path)
-### 1. Setup requirements
-    pip3 install requirements.txt
-### 2. Go to calculator/calculator folder
+
+### 0. Setup
+- Clone the repo:
+
+        git clone https://github.com/jorgwel/calculator.git
+        
+- Download gecko driver from here: 
+
+        https://github.com/mozilla/geckodriver/releases
+
+  unzip it and put `geckodriver` file in `/usr/bin` (or somewhere in your path)
+- Install requirements: 
+
+        pip3 install -r requirements.txt
+    
+### 1. Go to calculator/calculator folder
     cd calculator/calculator
-### 3. Run selenium tests (you need latest Firefox installed)
+### 2. Run selenium tests (you need Firefox installed)
     python3 -m unittest discover -s tests/
-### 4. Start the calculator
+### 3. Start the calculator
     python3 -m calculator
-### 5. You can open localhost:8000 in your web browser 
+### 4. You can open localhost:8000 in your web browser 
 - Use your mouse, your fingers (in touchscreen or phone) or your keyboard (use C key for clear).  
 
 # Changelog
