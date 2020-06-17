@@ -71,11 +71,21 @@ CalculatorEngine.prototype.setNewValueOnField = function ( value ) {
 
 CalculatorEngine.prototype.deleteDigit = function () {
     if ( this.o.getCurrentState() === operationState.CAPTURING_FIRST_NUMBER ) {
-        this.o.firstNumber = this.numberDismantler.deleteDigitFromFirstName( this.o.firstNumber );
+        this.o.firstNumber = this.numberDismantler.deleteDigitFromNumber( this.o.firstNumber );
         this.screen.setResult( this.o.firstNumber );
     } else {
-        this.o.secondNumber = this.numberDismantler.deleteDigitFromSecond( this.o.secondNumber );
+        this.o.secondNumber = this.numberDismantler.deleteDigitFromNumber( this.o.secondNumber );
         this.screen.setResult( this.o.secondNumber );
+    }
+}
+
+CalculatorEngine.prototype.performCalculation = function () {
+    var r = this.alu.performOperation( this.o );
+    if ( r.resultType === operationResultType.SUCCESS ) {
+        this.screen.setResult( r.result );
+        this.o.resetOperation();
+    } else {
+        this.screen.setError( r.result );
     }
 }
 
@@ -94,12 +104,6 @@ CalculatorEngine.prototype.act = function ( value, actionType ) {
         this.o.resetOperation();
         this.screen.setResult( 0 );
     } else if ( actionType === actionTypes.CALCULATE ) {
-        var r = this.alu.performOperation( this.o );
-        if ( r.resultType === operationResultType.SUCCESS ) {
-            this.screen.setResult( r.result );
-            this.o.resetOperation();
-        } else {
-            this.screen.setError( r.result );
-        }
+        this.performCalculation();
     }
 }
