@@ -1,41 +1,34 @@
 import unittest
 
+from tests.calculator_facade import CalculatorFacade
+from tests.clicks_checker import ClicksChecker
 from tests.server_test import ServerTest
-
-HOME = "http://localhost:3000"
-RESULTS_PANEL_ID = 'results_panel'
-ERROR_PANEL_ID = 'error_panel'
-OPERATIONS = {'+': 'plus_button', '-': 'minus_button',
-              '*': 'multiplication_button', '/': 'division_button',
-              'C': 'clear_button', '=': 'equals_button', '<': 'delete_button'}
-NUMBERS = {'0': 'zero_button', '1': 'one_button', '2': 'two_button',
-           '3': 'three_button', '4': 'four_button', '5': 'five_button',
-           '6': 'six_button', '7': 'seven_button', '8': 'eight_button',
-           '9': 'nine_button', '.': 'dot_button'}
-ALL_BUTTONS = {**OPERATIONS, **NUMBERS}
 
 
 class CalculatorActions(ServerTest):
 
     def setUp(self):
         print("Testing", self._testMethodName)
+        self.calculator_facade = CalculatorFacade(self.driver)
+        self.checker = ClicksChecker(self.calculator_facade)
 
     def tearDown(self):
-        self.click("C")
+        self.calculator_facade.click("C")
 
     def test_calculator_has_all_components_available(self):
-        for id in self.get_calculator_elements_ids():
-            self.verify_element_existence_by_id(self.driver, id)
-        assert self.get_result() == '0'
+        for id in self.calculator_facade.get_calculator_elements_ids():
+            self.verify_element_existence_by_id(id)
+        assert self.calculator_facade.get_result() == '0'
+        assert self.calculator_facade.get_error() == ''
 
     def test_calculator_can_delete_from_first_number(self):
-        self.checkClicks([
+        self.check([
             ["1", "1"],
             ["<", "0"]
         ])
 
     def test_division_by_zero_shows_error(self):
-        self.checkClicks([
+        self.check([
             ["1", "1"],
             ["/", "1"],
             ["0", "0"],
@@ -43,7 +36,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_calculator_can_delete_from_second_number(self):
-        self.checkClicks([
+        self.check([
             ["5", "5"],
             ["+", "5"],
             ["9", "9"],
@@ -53,7 +46,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_calculator_can_delete_after_an_operation(self):
-        self.checkClicks([
+        self.check([
             ["5", "5"],
             ["+", "5"],
             ["5", "5"],
@@ -66,7 +59,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_cannot_be_zeros_to_the_left_of_any_digit(self):
-        self.checkClicks([
+        self.check([
             ["0", "0"],
             ["0", "0"],
             ["1", "1"],
@@ -74,7 +67,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_five_plus_five_shows_ten_in_result_panel(self):
-        self.checkClicks([
+        self.check([
             ["5", "5"],
             ["+", "5"],
             ["5", "5"],
@@ -82,7 +75,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_user_can_repeatedly_click_on_equals(self):
-        self.checkClicks([
+        self.check([
             ["1", "1"],
             ["0", "10"],
             ["=", "10"],
@@ -90,14 +83,14 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_five_then_five_shows_fifty_five_in_result_panel(self):
-        self.checkClicks([
+        self.check([
             ["5", "5"],
             ["5", "55"],
             ["=", "55"]
         ])
 
     def test_zero_plus_seventeen(self):
-        self.checkClicks([
+        self.check([
             ["0", "0"],
             ["+", "0"],
             ["1", "1"],
@@ -106,7 +99,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_zero_minus_three(self):
-        self.checkClicks([
+        self.check([
             ["0", "0"],
             ["-", "0"],
             ["3", "3"],
@@ -114,7 +107,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_zero_dot_two_plus_three_dot_seven(self):
-        self.checkClicks([
+        self.check([
             ["0", "0"],
             [".", "0."],
             ["2", "0.2"],
@@ -126,7 +119,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_zero_dot_two_times_three_dot_seven(self):
-        self.checkClicks([
+        self.check([
             ["0", "0"],
             [".", "0."],
             ["2", "0.2"],
@@ -138,7 +131,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_one_dot_five_divided_by_two(self):
-        self.checkClicks([
+        self.check([
             ["1", "1"],
             [".", "1."],
             ["5", "1.5"],
@@ -148,7 +141,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_one_dot_five_minus_one_dot_three(self):
-        self.checkClicks([
+        self.check([
             ["1", "1"],
             [".", "1."],
             ["5", "1.5"],
@@ -160,7 +153,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_user_can_start_a_new_chain_of_operations(self):
-        self.checkClicks([
+        self.check([
             ["5", "5"],
             ["+", "5"],
             ["5", "5"],
@@ -172,7 +165,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_user_can_type_only_one_dot(self):
-        self.checkClicks([
+        self.check([
             ["1", "1"],
             [".", "1."],
             [".", "1."],
@@ -183,45 +176,15 @@ class CalculatorActions(ServerTest):
             ["=", "0.75"]
         ])
 
-    def get_result(self):
-        return self.get_text(RESULTS_PANEL_ID)
-
-    def get_error(self):
-        return self.get_text(ERROR_PANEL_ID)
-
-    def click(self, button):
-        self.driver.find_element_by_id(ALL_BUTTONS[button]).click()
-
-    def get_text(self, id):
-        return self.driver.find_element_by_id(id).text
-
-    def verify_element_existence_by_id(self, driver, id):
+    def verify_element_existence_by_id(self, id):
         try:
-            assert len(driver.find_elements_by_id(id)) == 1
+            assert len(self.driver.find_elements_by_id(id)) == 1
         except:
-            print(f"An exception trying to find by id: {id}")
+            print(f"Element with id was not found: {id}")
             raise
 
-    def get_calculator_elements_ids(self):
-        return list(OPERATIONS.values()) + list(NUMBERS.values()) + [RESULTS_PANEL_ID] + [ERROR_PANEL_ID]
-
-    def checkClicks(self, clicks):
-        for c in clicks:
-            button = c[0]
-            expected = c[1]
-            error = None
-            if len(c) == 3:
-                error = c[2]
-            try:
-                self.click(button)
-                assert self.get_result() == expected
-                if error is not None:
-                    assert self.get_error() == error
-                else:
-                    assert len(self.get_error()) == 0
-            except:
-                print(f"An exception checking click: {button},{expected},{error}")
-                raise
+    def check(self, clicks):
+        self.checker.check(clicks)
 
 
 if __name__ == "__main__":
