@@ -13,8 +13,9 @@ CalculatorBuilder.prototype.buildCalculatorCircuits = function () {
     var o = new Operation();
     var alu = new Alu();
     var numBuilder = new NumberBuilder();
+    var numberDismantler = new NumberDismantler();
     var screen = new CalculatorScreen();
-    this.circuits = new EngineCircuits( o, alu, numBuilder, screen )
+    this.circuits = new EngineCircuits( o, alu, numBuilder, numberDismantler, screen )
     return this;
 }
 
