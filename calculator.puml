@@ -1,0 +1,27 @@
+@startuml
+state j as "jQuery"
+state bi as "Big.js"
+state w as "Calculator WebPage 🖩"
+
+state s as "Selenium"
+state u as "Unittest"
+state t as "TDD"
+state p as "Python 🐍"
+
+state b as "Bottle"
+state c as "CSS"
+state co as "Color Palette"
+
+
+w-u-> j
+w-r-> bi
+w-l-> c
+c-l-> co
+
+w -d-> b
+b -d-> p
+p-l-> u
+u-l-> s
+p-r-> t
+
+@enduml
