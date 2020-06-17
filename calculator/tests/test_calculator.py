@@ -27,6 +27,14 @@ class CalculatorActions(ServerTest):
             self.verify_element_existence_by_id(self.driver, id)
         assert self.get_result() == '0'
 
+    def test_cannot_be_zeros_to_the_left_of_any_digit(self):
+        self.checkClicks([
+            ["0", "0"],
+            ["0", "0"],
+            ["1", "1"],
+            ["=", "1"]
+        ])
+
     def test_five_plus_five_shows_ten_in_result_panel(self):
         self.checkClicks([
             ["5", "5"],
@@ -156,8 +164,12 @@ class CalculatorActions(ServerTest):
         for c in clicks:
             button = c[0]
             expected = c[1]
-            self.click(button)
-            assert self.get_result() == expected
+            try:
+                self.click(button)
+                assert self.get_result() == expected
+            except:
+                print(f"An exception checking click: {button},{expected}")
+                raise
 
 
 if __name__ == "__main__":
