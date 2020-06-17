@@ -21,60 +21,90 @@ CalculatorOuterBox.prototype.setError = function ( value ) {
     $( "#error_panel" ).html( value );
 };
 
-CalculatorOuterBox.prototype.addOnNumberClickedListener = function ( buttonId, value, fn ) {
-    $( "#" + buttonId ).click( function () {
+CalculatorOuterBox.prototype.addKeyListenerToBody = function ( keyboardValues, id ) {
+    $( "body" ).keypress( function ( event ) {
+        if ( keyboardValues.includes( event.which, 0 ) ) {
+            event.preventDefault();
+            $( id ).click()
+        }
+    } );
+}
+
+CalculatorOuterBox.prototype.addKeyListenerToBodyForKeyDown = function ( keyboardValues, id ) {
+    $( "body" ).keydown( function ( event ) {
+        if ( keyboardValues.includes( event.which, 0 ) ) {
+            event.preventDefault();
+            $( id ).click()
+        }
+    } );
+}
+
+CalculatorOuterBox.prototype.addOnNumberClickedListener = function ( buttonId, value, keyboardValues, fn ) {
+    var id = "#" + buttonId;
+    $( id ).click( function () {
         fn( value );
     } );
+    this.addKeyListenerToBody( keyboardValues, id );
 };
 
-CalculatorOuterBox.prototype.addOnOperationClickedListener = function ( operatorId, value, fn ) {
-    $( "#" + operatorId ).click( function () {
+CalculatorOuterBox.prototype.addOnOperationClickedListener = function ( operatorId, value, keyboardValues, fn ) {
+    var id = "#" + operatorId;
+    $( id ).click( function () {
         fn( value );
     } );
+    this.addKeyListenerToBody( keyboardValues, id );
 }
 
 CalculatorOuterBox.prototype.setActionForEquals = function ( fn ) {
-    $( "#equals_button" ).click( fn );
+    var id = "#equals_button";
+    $( id ).click( fn );
+    this.addKeyListenerToBody( [ 61, 13 ], id );
 }
 
 CalculatorOuterBox.prototype.setActionForClear = function ( fn ) {
-    $( "#clear_button" ).click( fn );
+    var id = "#clear_button";
+    $( id ).click( fn );
+    this.addKeyListenerToBody( [ 99, 67 ], id );
 }
 
 CalculatorOuterBox.prototype.setActionForDotButton = function ( fn ) {
-    $( "#dot_button" ).click( fn );
+    var id = "#dot_button";
+    $( id ).click( fn );
+    this.addKeyListenerToBody( [ 46 ], id );
 }
 
 CalculatorOuterBox.prototype.setActionForDeleteButton = function ( fn ) {
-    $( "#delete_button" ).click( fn );
+    var id = "#delete_button";
+    $( id ).click( fn );
+    this.addKeyListenerToBodyForKeyDown( [ 8 ], id );
 }
 
 CalculatorOuterBox.prototype.setActionsForNumbers = function ( fn ) {
     var numbersMap = [
-        { key: 'zero_button', value: 0 },
-        { key: 'one_button', value: 1 },
-        { key: 'two_button', value: 2 },
-        { key: 'three_button', value: 3 },
-        { key: 'four_button', value: 4 },
-        { key: 'five_button', value: 5 },
-        { key: 'six_button', value: 6 },
-        { key: 'seven_button', value: 7 },
-        { key: 'eight_button', value: 8 },
-        { key: 'nine_button', value: 9 }
+        { key: 'zero_button', keyboardValues: [ 48 ], value: 0 },
+        { key: 'one_button', keyboardValues: [ 49 ], value: 1 },
+        { key: 'two_button', keyboardValues: [ 50 ], value: 2 },
+        { key: 'three_button', keyboardValues: [ 51 ], value: 3 },
+        { key: 'four_button', keyboardValues: [ 52 ], value: 4 },
+        { key: 'five_button', keyboardValues: [ 53 ], value: 5 },
+        { key: 'six_button', keyboardValues: [ 54 ], value: 6 },
+        { key: 'seven_button', keyboardValues: [ 55 ], value: 7 },
+        { key: 'eight_button', keyboardValues: [ 56 ], value: 8 },
+        { key: 'nine_button', keyboardValues: [ 57 ], value: 9 }
     ];
     for ( i = 0; i < numbersMap.length; i++ ) {
-        this.addOnNumberClickedListener( numbersMap[ i ].key, numbersMap[ i ].value, fn );
+        this.addOnNumberClickedListener( numbersMap[ i ].key, numbersMap[ i ].value, numbersMap[ i ].keyboardValues, fn );
     }
 }
 
 CalculatorOuterBox.prototype.setActionsForOperators = function ( fn ) {
     var operatorsMap = [
-        { key: 'plus_button', value: operators.PLUS },
-        { key: 'minus_button', value: operators.MINUS },
-        { key: 'multiplication_button', value: operators.TIMES },
-        { key: 'division_button', value: operators.DIVISION }
+        { key: 'plus_button', keyboardValues: [ 43 ], value: operators.PLUS },
+        { key: 'minus_button', keyboardValues: [ 45 ], value: operators.MINUS },
+        { key: 'multiplication_button', keyboardValues: [ 120, 88, 42 ], value: operators.TIMES },
+        { key: 'division_button', keyboardValues: [ 47 ], value: operators.DIVISION }
     ];
     for ( i = 0; i < operatorsMap.length; i++ ) {
-        this.addOnOperationClickedListener( operatorsMap[ i ].key, operatorsMap[ i ].value, fn );
+        this.addOnOperationClickedListener( operatorsMap[ i ].key, operatorsMap[ i ].value, operatorsMap[ i ].keyboardValues, fn );
     }
 }

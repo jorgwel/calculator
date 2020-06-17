@@ -1,7 +1,7 @@
 import unittest
 
 from tests.calculator_facade import CalculatorFacade
-from tests.clicks_checker import ClicksChecker
+from tests.clicks_checker import EventsChecker
 from tests.server_test import ServerTest
 
 
@@ -10,7 +10,7 @@ class CalculatorActions(ServerTest):
     def setUp(self):
         print("Testing", self._testMethodName)
         self.calculator_facade = CalculatorFacade(self.driver)
-        self.checker = ClicksChecker(self.calculator_facade)
+        self.checker = EventsChecker(self.calculator_facade)
 
     def tearDown(self):
         self.calculator_facade.click("C")
@@ -21,14 +21,48 @@ class CalculatorActions(ServerTest):
         assert self.calculator_facade.get_result() == '0'
         assert self.calculator_facade.get_error() == ''
 
+    def test_calculator_receives_keyboard_events(self):
+        self.check_typed_chars([
+            ["0", "0"],
+            ["1", "1"],
+            ["2", "12"],
+            ["3", "123"],
+            ["4", "1234"],
+            ["5", "12345"],
+            ["6", "123456"],
+            ["7", "1234567"],
+            ["8", "12345678"],
+            ["9", "123456789"],
+            ["0", "1234567890"],
+            [".", "1234567890."],
+            ["1", "1234567890.1"],
+            ["<", "1234567890."],
+            ["<", "1234567890"],
+            ["+", "1234567890"],
+            ["1", "1"],
+            ["=", "1234567891"],
+            ["-", "1234567891"],
+            ["9", "9"],
+            ["1", "91"],
+            ["=", "1234567800"],
+            ["/", "1234567800"],
+            ["2", "2"],
+            ["=", "617283900"],
+            ["*", "617283900"],
+            [".", "."],
+            ["5", ".5"],
+            ["=", "308641950"],
+            ["C", "0"]
+        ])
+
     def test_calculator_can_delete_from_first_number(self):
-        self.check([
+        self.check_clicks([
             ["1", "1"],
             ["<", "0"]
         ])
 
     def test_division_by_zero_shows_error(self):
-        self.check([
+        self.check_clicks([
             ["1", "1"],
             ["/", "1"],
             ["0", "0"],
@@ -36,7 +70,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_calculator_can_delete_from_second_number(self):
-        self.check([
+        self.check_clicks([
             ["5", "5"],
             ["+", "5"],
             ["9", "9"],
@@ -46,7 +80,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_calculator_can_delete_after_an_operation(self):
-        self.check([
+        self.check_clicks([
             ["5", "5"],
             ["+", "5"],
             ["5", "5"],
@@ -59,7 +93,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_cannot_be_zeros_to_the_left_of_any_digit(self):
-        self.check([
+        self.check_clicks([
             ["0", "0"],
             ["0", "0"],
             ["1", "1"],
@@ -67,7 +101,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_five_plus_five_shows_ten_in_result_panel(self):
-        self.check([
+        self.check_clicks([
             ["5", "5"],
             ["+", "5"],
             ["5", "5"],
@@ -75,7 +109,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_user_can_repeatedly_click_on_equals(self):
-        self.check([
+        self.check_clicks([
             ["1", "1"],
             ["0", "10"],
             ["=", "10"],
@@ -83,14 +117,14 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_five_then_five_shows_fifty_five_in_result_panel(self):
-        self.check([
+        self.check_clicks([
             ["5", "5"],
             ["5", "55"],
             ["=", "55"]
         ])
 
     def test_zero_plus_seventeen(self):
-        self.check([
+        self.check_clicks([
             ["0", "0"],
             ["+", "0"],
             ["1", "1"],
@@ -99,7 +133,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_zero_minus_three(self):
-        self.check([
+        self.check_clicks([
             ["0", "0"],
             ["-", "0"],
             ["3", "3"],
@@ -107,7 +141,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_zero_dot_two_plus_three_dot_seven(self):
-        self.check([
+        self.check_clicks([
             ["0", "0"],
             [".", "0."],
             ["2", "0.2"],
@@ -119,7 +153,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_zero_dot_two_times_three_dot_seven(self):
-        self.check([
+        self.check_clicks([
             ["0", "0"],
             [".", "0."],
             ["2", "0.2"],
@@ -131,7 +165,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_one_dot_five_divided_by_two(self):
-        self.check([
+        self.check_clicks([
             ["1", "1"],
             [".", "1."],
             ["5", "1.5"],
@@ -141,7 +175,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_one_dot_five_minus_one_dot_three(self):
-        self.check([
+        self.check_clicks([
             ["1", "1"],
             [".", "1."],
             ["5", "1.5"],
@@ -153,7 +187,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_user_can_start_a_new_chain_of_operations(self):
-        self.check([
+        self.check_clicks([
             ["5", "5"],
             ["+", "5"],
             ["5", "5"],
@@ -165,7 +199,7 @@ class CalculatorActions(ServerTest):
         ])
 
     def test_user_can_type_only_one_dot(self):
-        self.check([
+        self.check_clicks([
             ["1", "1"],
             [".", "1."],
             [".", "1."],
@@ -183,8 +217,11 @@ class CalculatorActions(ServerTest):
             print(f"Element with id was not found: {id}")
             raise
 
-    def check(self, clicks):
-        self.checker.check(clicks)
+    def check_clicks(self, clicks):
+        self.checker.check_clicks(clicks)
+
+    def check_typed_chars(self, typed_chars):
+        self.checker.check_typed_chars(typed_chars)
 
 
 if __name__ == "__main__":

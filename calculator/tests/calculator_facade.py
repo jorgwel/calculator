@@ -1,3 +1,5 @@
+from selenium.webdriver.common.keys import Keys
+
 RESULTS_PANEL_ID = 'results_panel'
 ERROR_PANEL_ID = 'error_panel'
 
@@ -14,9 +16,16 @@ ALL_BUTTONS = {**OPERATIONS, **NUMBERS}
 class CalculatorFacade:
     def __init__(self, driver):
         self.driver = driver
+        self.body = self.driver.find_element_by_xpath("//body")
 
     def get_result(self):
         return self.get_text(RESULTS_PANEL_ID)
+
+    def type_char(self, char):
+        if char == '<':
+            self.body.send_keys(Keys.BACKSPACE)
+        else:
+            self.body.send_keys(char)
 
     def get_error(self):
         return self.get_text(ERROR_PANEL_ID)
