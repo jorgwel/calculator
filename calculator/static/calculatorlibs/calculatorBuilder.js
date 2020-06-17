@@ -46,5 +46,8 @@ CalculatorBuilder.prototype.connectBoxWithEngine = function () {
     this.box.setActionForDotButton( function () {
         outThis.engine.typeDigit( "." );
     } );
+    this.box.setActionForDeleteButton( function () {
+        outThis.engine.deleteFromCurrentNumber();
+    } );
     return this;
 }

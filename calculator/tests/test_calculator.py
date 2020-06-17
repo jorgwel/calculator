@@ -6,7 +6,7 @@ HOME = "http://localhost:3000"
 RESULTS_PANEL_ID = 'results_panel'
 OPERATIONS = {'+': 'plus_button', '-': 'minus_button',
               '*': 'multiplication_button', '/': 'division_button',
-              'C': 'clear_button', '=': 'equals_button'}
+              'C': 'clear_button', '=': 'equals_button', '<': 'delete_button'}
 NUMBERS = {'0': 'zero_button', '1': 'one_button', '2': 'two_button',
            '3': 'three_button', '4': 'four_button', '5': 'five_button',
            '6': 'six_button', '7': 'seven_button', '8': 'eight_button',
@@ -22,10 +22,39 @@ class CalculatorActions(ServerTest):
     def tearDown(self):
         self.click("C")
 
-    def test_calculator_exists(self):
+    def test_calculator_has_all_components_available(self):
         for id in self.get_calculator_elements_ids():
             self.verify_element_existence_by_id(self.driver, id)
         assert self.get_result() == '0'
+
+    def test_calculator_can_delete_from_first_number(self):
+        self.checkClicks([
+            ["1", "1"],
+            ["<", "0"]
+        ])
+
+    def test_calculator_can_delete_from_second_number(self):
+        self.checkClicks([
+            ["5", "5"],
+            ["+", "5"],
+            ["9", "9"],
+            ["<", "0"],
+            ["6", "6"],
+            ["=", "11"]
+        ])
+
+    def test_calculator_can_delete_after_an_operation(self):
+        self.checkClicks([
+            ["5", "5"],
+            ["+", "5"],
+            ["5", "5"],
+            ["=", "10"],
+            ["<", "0"],
+            ["1", "1"],
+            ["+", "1"],
+            ["1", "1"],
+            ["=", "2"]
+        ])
 
     def test_cannot_be_zeros_to_the_left_of_any_digit(self):
         self.checkClicks([

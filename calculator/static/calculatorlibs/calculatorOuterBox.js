@@ -41,6 +41,10 @@ CalculatorOuterBox.prototype.setActionForDotButton = function(fn) {
     $("#dot_button").click(fn);
 }
 
+CalculatorOuterBox.prototype.setActionForDeleteButton = function(fn) {
+    $("#delete_button").click(fn);
+}
+
 CalculatorOuterBox.prototype.setActionsForNumbers = function(fn) {
     var numbersMap = [
         {key: 'zero_button', value: 0},

@@ -46,6 +46,50 @@ header {
     text-align: center;
 }
 
+.delete-button {
+    color: #FFFFF6D9;
+    background: #9e9e9e;
+    padding: 20px;
+    border: 2px solid #cf7500;
+    border-radius: 50px;
+    font-family: 'Odibee Sans', cursive;
+    font-size: 3em;
+    text-align: center;
+}
+
+.equals-button {
+    color: #FFFFF6D9;
+    background: #323232;
+    padding: 20px;
+    border: 2px solid #cf7500;
+    border-radius: 50px;
+    font-family: 'Odibee Sans', cursive;
+    font-size: 3em;
+    text-align: center;
+}
+
+.clear-button {
+    color: #FFFFF6D9;
+    background: #0083bf;
+    padding: 20px;
+    border: 2px solid #cf7500;
+    border-radius: 50px;
+    font-family: 'Odibee Sans', cursive;
+    font-size: 3em;
+    text-align: center;
+}
+
+.operation-button {
+    color: black;
+    background: #dcdcdc;
+    padding: 20px;
+    border: 2px solid #cf7500;
+    border-radius: 50px;
+    font-family: 'Odibee Sans', cursive;
+    font-size: 3em;
+    text-align: center;
+}
+
 .number-button:hover {
     color: #000000;
     border-color: #000000;
