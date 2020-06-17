@@ -9,6 +9,7 @@ var actionTypes = {
 function CalculatorScreen() {
     this.getResult = null;
     this.setResult = null;
+    this.setError = null;
     return this;
 }
 
@@ -93,7 +94,11 @@ CalculatorEngine.prototype.act = function ( value, actionType ) {
         this.screen.setResult( 0 );
     } else if ( actionType === actionTypes.CALCULATE ) {
         var r = this.alu.performOperation( this.o );
-        this.screen.setResult( r );
-        this.o.resetOperation();
+        if ( r.resultType === operationResultType.SUCCESS ) {
+            this.screen.setResult( r.result );
+            this.o.resetOperation();
+        } else {
+            this.screen.setError( r.result );
+        }
     }
 }

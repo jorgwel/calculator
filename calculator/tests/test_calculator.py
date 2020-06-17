@@ -4,6 +4,7 @@ from tests.server_test import ServerTest
 
 HOME = "http://localhost:3000"
 RESULTS_PANEL_ID = 'results_panel'
+ERROR_PANEL_ID = 'error_panel'
 OPERATIONS = {'+': 'plus_button', '-': 'minus_button',
               '*': 'multiplication_button', '/': 'division_button',
               'C': 'clear_button', '=': 'equals_button', '<': 'delete_button'}
@@ -31,6 +32,14 @@ class CalculatorActions(ServerTest):
         self.checkClicks([
             ["1", "1"],
             ["<", "0"]
+        ])
+
+    def test_division_by_zero_shows_error(self):
+        self.checkClicks([
+            ["1", "1"],
+            ["/", "1"],
+            ["0", "0"],
+            ["=", "0", "E"],
         ])
 
     def test_calculator_can_delete_from_second_number(self):
@@ -177,6 +186,9 @@ class CalculatorActions(ServerTest):
     def get_result(self):
         return self.get_text(RESULTS_PANEL_ID)
 
+    def get_error(self):
+        return self.get_text(ERROR_PANEL_ID)
+
     def click(self, button):
         self.driver.find_element_by_id(ALL_BUTTONS[button]).click()
 
@@ -184,20 +196,31 @@ class CalculatorActions(ServerTest):
         return self.driver.find_element_by_id(id).text
 
     def verify_element_existence_by_id(self, driver, id):
-        assert len(driver.find_elements_by_id(id)) == 1
+        try:
+            assert len(driver.find_elements_by_id(id)) == 1
+        except:
+            print(f"An exception trying to find by id: {id}")
+            raise
 
     def get_calculator_elements_ids(self):
-        return list(OPERATIONS.values()) + list(NUMBERS.values()) + [RESULTS_PANEL_ID]
+        return list(OPERATIONS.values()) + list(NUMBERS.values()) + [RESULTS_PANEL_ID] + [ERROR_PANEL_ID]
 
     def checkClicks(self, clicks):
         for c in clicks:
             button = c[0]
             expected = c[1]
+            error = None
+            if len(c) == 3:
+                error = c[2]
             try:
                 self.click(button)
                 assert self.get_result() == expected
+                if error is not None:
+                    assert self.get_error() == error
+                else:
+                    assert len(self.get_error()) == 0
             except:
-                print(f"An exception checking click: {button},{expected}")
+                print(f"An exception checking click: {button},{expected},{error}")
                 raise
 
 

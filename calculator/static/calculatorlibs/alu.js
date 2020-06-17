@@ -3,6 +3,17 @@ var operators = { PLUS: '+', MINUS: '-', TIMES: '*', DIVISION: '/' };
 function Alu() {
 }
 
+var operationResultType = {
+    SUCCESS: 'SUCCESS',
+    ERROR: 'ERROR'
+}
+
+function Result( result, typeOfResult ) {
+    this.result = result;
+    this.resultType = typeOfResult;
+    return this;
+}
+
 Alu.prototype.sum = function ( firstNum, secondNum ) {
     return new Big( this.toNumber( firstNum ) ).plus( this.toNumber( secondNum ) ).toString();
 }
@@ -28,14 +39,21 @@ Alu.prototype.performOperation = function ( operation ) {
     var op = operation.operator;
     var f = operation.firstNumber;
     var s = operation.secondNumber;
+    var ok = operationResultType.SUCCESS;
+    var r = null;
+    try {
+        if ( op === operators.PLUS )
+            r = new Result( this.sum( f, s ), ok );
+        else if ( op === operators.MINUS )
+            r = new Result( this.substract( f, s ), ok );
+        else if ( op === operators.TIMES )
+            r = new Result( this.times( f, s ), ok );
+        else if ( op === operators.DIVISION )
+            r = new Result( this.div( f, s ), ok );
+    } catch ( e ) {
+        r = new Result( 'E', operationResultType.ERROR )
+    }
+    return r;
 
-    if ( op === operators.PLUS )
-        return this.sum( f, s );
-    else if ( op === operators.MINUS )
-        return this.substract( f, s );
-    else if ( op === operators.TIMES )
-        return this.times( f, s );
-    else if ( op === operators.DIVISION )
-        return this.div( f, s );
 }
 

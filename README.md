@@ -10,7 +10,7 @@ b. Put `geckodriver` file in `/usr/bin` (or somewhere in your path)
     pip3 install requirements.txt
 ### 2. Go to calculator/calculator folder
     cd calculator/calculator
-### 3. Run tests (you need latest Firefox installed)
+### 3. Run selenium tests (you need latest Firefox installed)
     python3 -m unittest discover -s tests/
 ### 4. Start the calculator
     python3 -m calculator

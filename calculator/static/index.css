@@ -20,6 +20,8 @@ header {
 }
 
 .calculator-screen {
+    display: grid;
+    grid-template-columns: 95% auto;
     font-family: 'Exo 2', sans-serif;
     color: black;
     background: #e8ead3;
@@ -29,6 +31,11 @@ header {
     border-radius: 50px;
     font-size: 3em;
     text-align: right;
+}
+
+.error {
+    color: #dc0000;
+    font-family: 'Warnes', cursive;
 }
 
 .calculator-icon {
@@ -98,7 +105,31 @@ header {
 @media only screen and (max-height: 600px) {
     .number-button {
         padding: 5px;
+        font-size: 2em;
+    }
+
+    .delete-button {
+        padding: 5px;
         font-size: 1.5em;
+        font-weight: bolder;
+    }
+
+    .clear-button {
+        padding: 5px;
+        font-size: 1.5em;
+        font-weight: bolder;
+    }
+
+    .equals-button {
+        padding: 5px;
+        font-size: 1.5em;
+        font-weight: bolder;
+    }
+
+    .operation-button {
+        padding: 5px;
+        font-size: 1.5em;
+        font-weight: bolder;
     }
 
     .calculator-screen {

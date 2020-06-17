@@ -26,6 +26,7 @@ CalculatorBuilder.prototype.buildEngine = function () {
 CalculatorBuilder.prototype.connectBoxWithCircuits = function () {
     this.circuits.screen.setResult = this.box.setResult;
     this.circuits.screen.getResult = this.box.getResult;
+    this.circuits.screen.setError = this.box.setError;
     return this;
 }
 

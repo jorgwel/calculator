@@ -14,7 +14,12 @@ CalculatorOuterBox.prototype.getResult = function() {
 };
 
 CalculatorOuterBox.prototype.setResult = function(value) {
+    this.setError('');
     return $("#results_panel").html(value);
+};
+
+CalculatorOuterBox.prototype.setError = function(value) {
+    $("#error_panel").html(value);
 };
 
 CalculatorOuterBox.prototype.addOnNumberClickedListener = function(buttonId, value, fn) {
