@@ -1,5 +1,9 @@
 <html>
 <head>
+    <link media="all" type="text/css" rel="stylesheet" href="index.css">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Odibee+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@900&display=swap" rel="stylesheet">
     <script src="jquery-1.11.0.min.js"></script>
     <script src="big.min.js"></script>
     <script src="alu.js"></script>
@@ -9,82 +13,50 @@
     <script src="calculatorEngine.js"></script>
     <script src="calculatorBuilder.js"></script>
     <script src="main.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
 </head>
 <body>
+<header>
+    <span class="calculator-icon">🖩</span> < Cucalkuka >
+</header>
 
-<table>
-    <tr>
-        <td colspan="3">
-            <div id="results_panel">0</div>
+<div class="calculator-case">
+    <div class="calculator-screen">
+        <span id="results_panel">0</span>
+    </div>
+    <div class="calculator-row">
+        <div id="seven_button" class="number-button">7</div>
+        <div id="eight_button" class="number-button">8</div>
+        <div id="nine_button" class="number-button">9</div>
+    </div>
+    <div class="calculator-row">
+        <div id="four_button" class="number-button">4</div>
+        <div id="five_button" class="number-button">5</div>
+        <div id="six_button" class="number-button">6</div>
+    </div>
+    <div class="calculator-row">
+        <div id="one_button" class="number-button">1</div>
+        <div id="two_button" class="number-button">2</div>
+        <div id="three_button" class="number-button">3</div>
+    </div>
+    <div class="calculator-row">
+        <div></div>
+        <div id="zero_button" class="number-button">0</div>
+        <div id="dot_button" class="number-button">.</div>
+    </div>
+    <div class="calculator-row">
 
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <button id="seven_button">7</button>
-        </td>
-        <td>
-            <button id="eight_button">8</button>
-        </td>
-        <td>
-            <button id="nine_button">9</button>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <button id="four_button">4</button>
-        </td>
-        <td>
-            <button id="five_button">5</button>
-        </td>
-        <td>
-            <button id="six_button">6</button>
-        </td>
-    </tr>
+        <div id="plus_button" class="number-button">+</div>
+        <div id="minus_button" class="number-button">-</div>
+        <div id="multiplication_button" class="number-button">X</div>
 
-    <tr>
-        <td>
-            <button id="one_button">1</button>
-        </td>
-        <td>
-            <button id="two_button">2</button>
-        </td>
-        <td>
-            <button id="three_button">3</button>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <button id="zero_button">0</button>
-        </td>
-        </td>
-        <td>
-            <button id="dot_button">.</button>
-        </td>
-        <td>
-            <button id="plus_button">+</button>
-    </tr>
-    <tr>
-        <td>
-            <button id="minus_button">-</button>
-        </td>
-        <td>
-            <button id="multiplication_button">*</button>
-        </td>
-        <td>
-            <button id="division_button">/</button>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <button id="clear_button">C</button>
-        </td>
-        <td>
-            <button id="equals_button">=</button>
-        </td>
-    </tr>
-
-</table>
-
+    </div>
+    <div class="calculator-row">
+        <div id="division_button" class="number-button">/</div>
+        <div id="clear_button" class="number-button">C</div>
+        <div id="equals_button" class="number-button">=</div>
+    </div>
+</div>
 </body>
 </html>

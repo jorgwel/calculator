@@ -3,6 +3,11 @@ from bottle import Bottle, static_file
 app = Bottle()
 
 
+@app.route('/index.css')
+def serve_css():
+    return static_file('index.css', root='static/')
+
+
 @app.route('/')
 def serve_index():
     return static_file('index.html', root='static/')
