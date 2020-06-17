@@ -14,10 +14,8 @@ b. Put `geckodriver` file in `/usr/bin` (or somewhere in your path)
     python3 -m unittest discover -s tests/
 ### 4. Start the calculator
     python3 -m calculator
-### 5. You can open localhost:8000 in your web browser now.
-
-# Type with your physical keyboard
-Use your number pad, ENTER, INTRO, and BACKSPACE keys. Use C key for clear.  
+### 5. You can open localhost:8000 in your web browser 
+- Use your mouse, your fingers (in touchscreen or phone) or your keyboard (use C key for clear).  
 
 # Changelog
 - V.05 User can type calculator's numbers and symbols in her physical keyboard
