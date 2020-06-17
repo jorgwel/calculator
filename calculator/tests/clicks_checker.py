@@ -18,14 +18,17 @@ class EventsChecker:
             if len(c) == 3:
                 error = c[2]
             try:
-                fn(button)
-                assert self.f.get_result() == expected
-                if error is not None:
-                    assert self.f.get_error() == error
-                else:
-                    assert len(self.f.get_error()) == 0
+                self.perform_and_assert(button, error, expected, fn)
             except:
                 print(f"An exception checking button: {button}, "
                       f"expected: {expected} (found instead {self.f.get_result()}), "
                       f"error: {error}")
                 raise
+
+    def perform_and_assert(self, button, error, expected, fn):
+        fn(button)
+        assert self.f.get_result() == expected
+        if error is not None:
+            assert self.f.get_error() == error
+        else:
+            assert len(self.f.get_error()) == 0
