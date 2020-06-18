@@ -42,6 +42,37 @@ This is a classic calculator which is displayed on a web page. It has a small ba
 ## Note about Tests
 - Tests are being done in selenium-python
 
+# Small diagram for classes 
+- The software was taken to a place where the problem was fully understood, using TDD. Then with tests taking care of my back, I refactored it many times to take it to this structure.
+
+
+                    ,----.                                                        
+                    |Main|                                                        
+                    |----|                                                        
+                    |----|                                                        
+                    `----'                                                        
+                       |                                                          
+                       |                                                          
+             ,-----------------.                                                  
+             |CalculatorBuilder|                                                  
+             |-----------------|                                                  
+             |-----------------|                                                  
+             `-----------------'                                                  
+                                                                                  
+    ,----------------.   ,--------------.                                         
+    |CalculatorEngine|   |EngineCircuits|                                         
+    |----------------|   |--------------|                                         
+    |----------------|---|--------------|                                         
+    `----------------'   `--------------'                                         
+                                 |                                                
+                                                                                  
+    ,---------.  ,---.   ,-------------.   ,----------------.   ,----------------.
+    |Operation|  |ALU|   |NumberBuilder|   |NumberDismantler|   |CalculatorScreen|
+    |---------|  |---|   |-------------|   |----------------|   |----------------|
+    |---------|  |---|   |-------------|   |----------------|   |----------------|
+    `---------'  `---'   `-------------'   `----------------'   `----------------'
+
+
 # Small diagram of project
 
         

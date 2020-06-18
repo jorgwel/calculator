@@ -1,0 +1,23 @@
+@startuml
+state m as "Main"
+state cb as "CalculatorBuilder"
+state o as "Operation"
+state a as "ALU"
+state nb as "NumberBuilder"
+state nd as "NumberDismantler"
+state s as "CalculatorScreen"
+state ci as "EngineCircuits"
+state e as "CalculatorEngine"
+
+m --> cb
+cb -d-> e
+cb --> ci
+ci --> o
+ci --> a
+ci --> nb
+ci --> nd
+ci --> s
+e -r-> ci
+
+
+@enduml
