@@ -27,14 +27,12 @@ header {
     grid-area: log;
     border-radius: 50px;
     margin-left: 11px;
-
+    margin: 5px;
 }
 /*Tomé los estilos de: https://css-tricks.com/how-to-create-a-notebook-design-with-css/*/
 #history_items {
     color: #555;
     font-size: 22px;
-    padding: 0 !important;
-    font-family: courier, monospace;
     border: 1px solid #dedede;
     text-align: right;
     min-height: 150px;
@@ -249,11 +247,12 @@ header {
         max-height: 150px;
     }
     #history_panel {
-        margin-top: 11px;
+        margin: 11px 0px 0px 0px;
     }
     .log-title {
         font-size: 2em;
         margin-left: 0px;
         margin-top: 11px;
+        margin-left: 50px;
     }
 }
