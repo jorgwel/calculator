@@ -22,15 +22,30 @@ class PrintedLogType(enum.Enum):
 
 
 class PrintedLog:
-    def __init__(self, class_of_log, text):
-        self.text = text
+    def __init__(self, text=None, class_of_log=None):
+        if text is not None:
+            self.text = text
+        if class_of_log is not None:
+            self.log_type = self.get_log_type(class_of_log)
+
+    def get_log_type(self, class_of_log):
         if self.is_error(class_of_log):
-            self.log_type = PrintedLogType.ERROR
+            log_type = PrintedLogType.ERROR
         else:
-            self.log_type = PrintedLogType.NORMAL
+            log_type = PrintedLogType.NORMAL
+        return log_type
 
     def is_error(self, class_of_log):
         return "error" in class_of_log
+
+    def __str__(self) -> str:
+        return f"PrintedLog: {self.text}, {self.log_type} "
+
+    def __eq__(self, other):
+        if isinstance(other, PrintedLog):
+            return self.text == other.text and self.log_type == other.log_type
+        return False
+
 
 class CalculatorFacade:
     def __init__(self, driver):
@@ -43,7 +58,7 @@ class CalculatorFacade:
         return logs
 
     def to_log(self, e):
-        return PrintedLog(e.get_attribute("class"), e.text)
+        return PrintedLog(e.text, e.get_attribute("class"))
 
     def get_result(self):
         return self.get_text(RESULTS_PANEL_ID)

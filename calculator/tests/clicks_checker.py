@@ -1,3 +1,6 @@
+from tests.calculator_facade import PrintedLog
+
+
 class EventsChecker:
     def __init__(self, calculator_facade):
         self.f = calculator_facade
@@ -9,6 +12,19 @@ class EventsChecker:
     def check_typed_chars(self, clicks):
         fn = self.f.type_char
         self.check(clicks, fn)
+
+    def check_logs(self, expected_logs):
+        actual_logs = self.f.get_logs()
+        assert len(expected_logs) == len(actual_logs)
+        for i in range(len(actual_logs)):
+            log = self.to_log(expected_logs[i])
+            assert actual_logs[i] == log
+
+    def to_log(self, expected_log):
+        l = PrintedLog()
+        l.text = expected_log[0]
+        l.log_type = expected_log[1]
+        return l
 
     def check(self, clicks, fn):
         for c in clicks:

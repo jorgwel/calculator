@@ -40,20 +40,14 @@ class CalculatorActions(ServerTest):
             ["=", "1"],
         ])
 
-        logs = self.calculator_facade.get_logs()
-        assert len(logs) == 6
-        assert logs[0].text == "1+2"
-        assert logs[0].log_type == PrintedLogType.NORMAL
-        assert logs[1].text == "=3"
-        assert logs[1].log_type == PrintedLogType.NORMAL
-        assert logs[2].text == "99/0"
-        assert logs[2].log_type == PrintedLogType.ERROR
-        assert logs[3].text == "Division by zero"
-        assert logs[3].log_type == PrintedLogType.ERROR
-        assert logs[4].text == "99/99"
-        assert logs[4].log_type == PrintedLogType.NORMAL
-        assert logs[5].text == "=1"
-        assert logs[5].log_type == PrintedLogType.NORMAL
+        self.check_logs([
+            ["1+2", PrintedLogType.NORMAL],
+            ["=3", PrintedLogType.NORMAL],
+            ["99/0", PrintedLogType.ERROR],
+            ["Division by zero", PrintedLogType.ERROR],
+            ["99/99", PrintedLogType.NORMAL],
+            ["=1", PrintedLogType.NORMAL]
+        ])
 
     def test_calculator_receives_keyboard_events(self):
         self.check_typed_chars([
@@ -256,6 +250,9 @@ class CalculatorActions(ServerTest):
 
     def check_typed_chars(self, typed_chars):
         self.checker.check_typed_chars(typed_chars)
+
+    def check_logs(self, logs):
+        self.checker.check_logs(logs)
 
 
 if __name__ == "__main__":
