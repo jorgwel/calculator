@@ -25,16 +25,18 @@ CalculatorOuterBox.prototype.addLog = function ( value ) {
     var li = $("<li>", {"class": "printed_item"});
     li.html(value);
     $("#history_items").append(li);
+    showBottomOfPrinterLog();
 };
 
 CalculatorOuterBox.prototype.addErrorLog = function ( value ) {
-    var li = $("<li>", {"class": "printed_item"});
+    var li = $("<li>", {"class": "printed_item error"});
     li.html(value);
     $("#history_items").append(li);
 };
 
 CalculatorOuterBox.prototype.clearLog = function () {
     $("#history_items").html("");
+    this.addLog("No operation in log");
 };
 
 CalculatorOuterBox.prototype.addKeyListenerToBody = function ( keyboardValues, id ) {
@@ -123,4 +125,11 @@ CalculatorOuterBox.prototype.setActionsForOperators = function ( fn ) {
     for ( i = 0; i < operatorsMap.length; i++ ) {
         this.addOnOperationClickedListener( operatorsMap[ i ].key, operatorsMap[ i ].value, operatorsMap[ i ].keyboardValues, fn );
     }
+}
+
+function showBottomOfPrinterLog() {
+    var out = document.getElementById( "history_items" );
+    var isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 1;
+    if ( !isScrolledToBottom )
+        out.scrollTop = out.scrollHeight - out.clientHeight;
 }

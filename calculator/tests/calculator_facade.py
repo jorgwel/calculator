@@ -1,3 +1,5 @@
+import enum
+
 from selenium.webdriver.common.keys import Keys
 
 RESULTS_PANEL_ID = 'results_panel'
@@ -14,6 +16,22 @@ NUMBERS = {'0': 'zero_button', '1': 'one_button', '2': 'two_button',
 ALL_BUTTONS = {**OPERATIONS, **NUMBERS}
 
 
+class PrintedLogType(enum.Enum):
+    ERROR = 'Error'
+    NORMAL = 'Normal'
+
+
+class PrintedLog:
+    def __init__(self, class_of_log, text):
+        self.text = text
+        if self.is_error(class_of_log):
+            self.log_type = PrintedLogType.ERROR
+        else:
+            self.log_type = PrintedLogType.NORMAL
+
+    def is_error(self, class_of_log):
+        return "error" in class_of_log
+
 class CalculatorFacade:
     def __init__(self, driver):
         self.driver = driver
@@ -21,7 +39,11 @@ class CalculatorFacade:
 
     def get_logs(self):
         elements = self.driver.find_elements_by_xpath("//*[contains(@class, 'printed_item')]")
-        return list(map(lambda e: e.text, elements))
+        logs = list(map(lambda e: self.to_log(e), elements))
+        return logs
+
+    def to_log(self, e):
+        return PrintedLog(e.get_attribute("class"), e.text)
 
     def get_result(self):
         return self.get_text(RESULTS_PANEL_ID)

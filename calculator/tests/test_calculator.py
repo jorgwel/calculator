@@ -4,6 +4,8 @@ from tests.calculator_facade import CalculatorFacade
 from tests.clicks_checker import EventsChecker
 from tests.server_test import ServerTest
 
+from tests.calculator_facade import PrintedLogType
+
 
 class CalculatorActions(ServerTest):
 
@@ -40,12 +42,18 @@ class CalculatorActions(ServerTest):
 
         logs = self.calculator_facade.get_logs()
         assert len(logs) == 6
-        assert logs[0] == "1+2"
-        assert logs[1] == "=3"
-        assert logs[2] == "99/0"
-        assert logs[3] == "Division by zero"
-        assert logs[4] == "99/99"
-        assert logs[5] == "=1"
+        assert logs[0].text == "1+2"
+        assert logs[0].log_type == PrintedLogType.NORMAL
+        assert logs[1].text == "=3"
+        assert logs[1].log_type == PrintedLogType.NORMAL
+        assert logs[2].text == "99/0"
+        assert logs[2].log_type == PrintedLogType.ERROR
+        assert logs[3].text == "Division by zero"
+        assert logs[3].log_type == PrintedLogType.ERROR
+        assert logs[4].text == "99/99"
+        assert logs[4].log_type == PrintedLogType.NORMAL
+        assert logs[5].text == "=1"
+        assert logs[5].log_type == PrintedLogType.NORMAL
 
     def test_calculator_receives_keyboard_events(self):
         self.check_typed_chars([
