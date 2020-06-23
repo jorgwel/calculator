@@ -4,6 +4,8 @@ from tests.calculator_facade import CalculatorFacade
 from tests.clicks_checker import EventsChecker
 from tests.server_test import ServerTest
 
+from tests.calculator_facade import PrintedLogType
+
 
 class CalculatorActions(ServerTest):
 
@@ -20,6 +22,32 @@ class CalculatorActions(ServerTest):
             self.verify_element_existence_by_id(id)
         assert self.calculator_facade.get_result() == '0'
         assert self.calculator_facade.get_error() == ''
+
+
+    def test_calculator_saves_operations(self):
+        self.check_clicks([
+            ["1", "1"],
+            ["+", "1"],
+            ["2", "2"],
+            ["=", "3"],
+            ["9", "9"],
+            ["9", "99"],
+            ["/", "99"],
+            ["0", "0"],
+            ["=", "0", "E"],
+            ["9", "9"],
+            ["9", "99"],
+            ["=", "1"],
+        ])
+
+        self.check_logs([
+            ["1+2", PrintedLogType.NORMAL],
+            ["=3", PrintedLogType.NORMAL],
+            ["99/0", PrintedLogType.ERROR],
+            ["Division by zero", PrintedLogType.ERROR],
+            ["99/99", PrintedLogType.NORMAL],
+            ["=1", PrintedLogType.NORMAL]
+        ])
 
     def test_calculator_receives_keyboard_events(self):
         self.check_typed_chars([
@@ -222,6 +250,9 @@ class CalculatorActions(ServerTest):
 
     def check_typed_chars(self, typed_chars):
         self.checker.check_typed_chars(typed_chars)
+
+    def check_logs(self, logs):
+        self.checker.check_logs(logs)
 
 
 if __name__ == "__main__":

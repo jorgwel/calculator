@@ -11,8 +11,8 @@ function Operation( firstNumber, secondNumber, operator ) {
     this.state = operationState.NOT_STARTED;
 
     this.toString = function () {
-        return this.firstNumber + " "
-            + this.operator + " "
+        return this.firstNumber + ""
+            + this.operator + ""
             + this.secondNumber;
     };
 

@@ -6,6 +6,11 @@ var actionTypes = {
     CLEAR: 'CLEAR'
 };
 
+function CalculatorPrinter() {
+    this.print = null;
+    return this;
+}
+
 function CalculatorScreen() {
     this.getResult = null;
     this.setResult = null;
@@ -13,12 +18,13 @@ function CalculatorScreen() {
     return this;
 }
 
-function EngineCircuits( operation, alu, numberBuilder, numberDismantler, screen ) {
+function EngineCircuits( operation, alu, numberBuilder, numberDismantler, screen, printer ) {
     this.operation = operation;
     this.alu = alu;
     this.numberBuilder = numberBuilder;
     this.numberDismantler = numberDismantler;
     this.screen = screen;
+    this.printer = printer;
     return this;
 }
 
@@ -28,6 +34,7 @@ function CalculatorEngine( circuits ) {
     this.numberBuilder = circuits.numberBuilder;
     this.numberDismantler = circuits.numberDismantler;
     this.screen = circuits.screen;
+    this.printer = circuits.printer;
 }
 
 CalculatorEngine.prototype.setOperation = function ( value ) {
@@ -79,14 +86,25 @@ CalculatorEngine.prototype.deleteDigit = function () {
     }
 }
 
+CalculatorEngine.prototype.setSuccessfulCalculationState = function( r ) {
+    this.screen.setResult( r.result );
+    this.printer.print( this.o.toString() );
+    this.printer.print( "=" + r.result );
+    this.o.resetOperation();
+}
+
+CalculatorEngine.prototype.setErroneousCalculationState = function ( r ) {
+    this.printer.printError( this.o.toString() );
+    this.printer.printError( r.resultType );
+    this.screen.setError( r.result );
+}
+
 CalculatorEngine.prototype.performCalculation = function () {
     var r = this.alu.performOperation( this.o );
-    if ( r.resultType === operationResultType.SUCCESS ) {
-        this.screen.setResult( r.result );
-        this.o.resetOperation();
-    } else {
-        this.screen.setError( r.result );
-    }
+    if ( r.resultType === operationResultType.SUCCESS )
+        this.setSuccessfulCalculationState( r );
+    else
+        this.setErroneousCalculationState( r );
 }
 
 CalculatorEngine.prototype.act = function ( value, actionType ) {
@@ -103,6 +121,7 @@ CalculatorEngine.prototype.act = function ( value, actionType ) {
     } else if ( actionType === actionTypes.CLEAR ) {
         this.o.resetOperation();
         this.screen.setResult( 0 );
+        this.printer.clear();
     } else if ( actionType === actionTypes.CALCULATE ) {
         this.performCalculation();
     }

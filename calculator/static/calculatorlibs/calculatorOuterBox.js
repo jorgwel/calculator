@@ -21,6 +21,21 @@ CalculatorOuterBox.prototype.setError = function ( value ) {
     $( "#error_panel" ).html( value );
 };
 
+CalculatorOuterBox.prototype.addLog = function ( value ) {
+    printItem( ["printed_item"], value );
+    showBottomOfPrinterLog();
+};
+
+CalculatorOuterBox.prototype.addErrorLog = function ( value ) {
+    printItem( ["printed_item", "error"], value );
+    showBottomOfPrinterLog();
+};
+
+CalculatorOuterBox.prototype.clearLog = function () {
+    $("#history_items").html("");
+    this.addLog("No operation in log");
+};
+
 CalculatorOuterBox.prototype.addKeyListenerToBody = function ( keyboardValues, id ) {
     $( "body" ).keypress( function ( event ) {
         if ( keyboardValues.includes( event.which, 0 ) ) {
@@ -107,4 +122,17 @@ CalculatorOuterBox.prototype.setActionsForOperators = function ( fn ) {
     for ( i = 0; i < operatorsMap.length; i++ ) {
         this.addOnOperationClickedListener( operatorsMap[ i ].key, operatorsMap[ i ].value, operatorsMap[ i ].keyboardValues, fn );
     }
+}
+
+function showBottomOfPrinterLog() {
+    var out = document.getElementById( "history_items" );
+    var isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 1;
+    if ( !isScrolledToBottom )
+        out.scrollTop = out.scrollHeight - out.clientHeight;
+}
+
+function printItem( classNames, value ) {
+    var li = $( "<li>", { "class": classNames.join( " " ) } );
+    li.html( value );
+    $( "#history_items" ).append( li );
 }

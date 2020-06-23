@@ -10,10 +10,74 @@ header {
     font-size: 3em;
 }
 
-.calculator-case {
-    text-align: center;
+.desk {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    grid-template-areas:
+            "calculator log";
 }
 
+.calculator-case {
+    text-align: center;
+    grid-area: calculator;
+}
+
+#history_panel {
+    background: #f2f2f2;
+    grid-area: log;
+    border-radius: 50px;
+    margin-left: 11px;
+    margin: 5px;
+}
+/*Tomé los estilos de: https://css-tricks.com/how-to-create-a-notebook-design-with-css/*/
+#history_items {
+    color: #555;
+    font-size: 22px;
+    border: 1px solid #dedede;
+    text-align: right;
+    min-height: 150px;
+    max-height: 500px;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+#history_items li {
+    list-style: none;
+    border-bottom: 1px dotted #ccc;
+    font-family: 'BenchNine', sans-serif;
+    letter-spacing: .13em;
+    font-size: 1.3em;
+    font-stretch: ultra-condensed;
+}
+#history_items li:hover {
+    background-color: #f0f0f0;
+    -webkit-transition: all 0.2s;
+    -moz-transition:    all 0.2s;
+    -ms-transition:     all 0.2s;
+    -o-transition:      all 0.2s;
+}
+.nodebook-side-lines {
+    border-left: 1px solid #ffaa9f;
+    border-right: 1px solid #ffaa9f;
+    width: 2px;
+    float: left;
+    height: 100%;
+    margin-left: 40px;
+}
+.notebook-header {
+    margin-left: 40px;
+    border-left: 1px solid #ffaa9f;
+    box-shadow: 1px 0 0 #ffaa9f;
+    width: 2px;
+    height: 80px;
+}
+.log-title {
+    font-family: 'PT Sans', monospace;
+    font-size: 3em;
+    text-align: left;
+    color: black;
+    margin-left: 45px;
+    margin-bottom: 11px;
+}
 .calculator-row {
     display: grid;
     grid-template-columns: repeat(3, 33.3%);
@@ -173,5 +237,22 @@ header {
 @media only screen and (max-width: 600px) {
     header {
         font-size: 1.5em;
+    }
+    .desk {
+        grid-template-areas:
+                "calculator"
+                "log";
+    }
+    #history_items {
+        max-height: 150px;
+    }
+    #history_panel {
+        margin: 11px 0px 0px 0px;
+    }
+    .log-title {
+        font-size: 2em;
+        margin-left: 0px;
+        margin-top: 11px;
+        margin-left: 50px;
     }
 }
