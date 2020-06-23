@@ -28,6 +28,7 @@ CalculatorOuterBox.prototype.addLog = function ( value ) {
 
 CalculatorOuterBox.prototype.addErrorLog = function ( value ) {
     printItem( ["printed_item", "error"], value );
+    showBottomOfPrinterLog();
 };
 
 CalculatorOuterBox.prototype.clearLog = function () {
