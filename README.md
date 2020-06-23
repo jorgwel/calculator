@@ -28,6 +28,8 @@ This is a classic calculator which is displayed on a web page. It has a small ba
 - Use your mouse, your fingers (in touchscreen or phone) or your keyboard (use C key for clear).  
 
 # Changelog
+- V.06 Calculator has a "log printer" where user can see list of operations performed
+    - Refactors & BugFixing
 - V.05 User can type calculator's numbers and symbols in her physical keyboard
     - Refactors & BugFixing
 - V.04 When an operation ends in error (as divide by zero) a signifier is shown in screen
