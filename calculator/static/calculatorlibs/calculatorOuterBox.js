@@ -21,6 +21,16 @@ CalculatorOuterBox.prototype.setError = function ( value ) {
     $( "#error_panel" ).html( value );
 };
 
+CalculatorOuterBox.prototype.addLog = function ( value ) {
+    var d = $("<div>", {"class": "printed_item"});
+    d.html(value);
+    $("#history_panel").append(d);
+};
+
+CalculatorOuterBox.prototype.clearLog = function () {
+    $("#history_panel").html("");
+};
+
 CalculatorOuterBox.prototype.addKeyListenerToBody = function ( keyboardValues, id ) {
     $( "body" ).keypress( function ( event ) {
         if ( keyboardValues.includes( event.which, 0 ) ) {

@@ -21,6 +21,19 @@ class CalculatorActions(ServerTest):
         assert self.calculator_facade.get_result() == '0'
         assert self.calculator_facade.get_error() == ''
 
+    def test_calculator_saves_operations(self):
+        self.check_clicks([
+            ["1", "1"],
+            ["+", "1"],
+            ["2", "2"],
+            ["=", "3"]
+        ])
+
+        logs = self.calculator_facade.get_logs()
+        assert len(logs) == 2
+        assert logs[0] == "1+2"
+        assert logs[1] == "=3"
+
     def test_calculator_receives_keyboard_events(self):
         self.check_typed_chars([
             ["0", "0"],
