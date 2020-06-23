@@ -35,27 +35,32 @@ Alu.prototype.toNumber = function ( str ) {
     return Number( str );
 }
 
+Alu.prototype.buildErrorResult = function ( e, r ) {
+    if ( e.toString().indexOf( "Division by zero" ) >= 0 )
+        r = new Result( 'E', operationResultType.ERROR_DIVISION_BY_ZERO );
+    else
+        r = new Result( 'E', operationResultType.UNKNOWN_ERROR )
+    return r;
+}
+
 Alu.prototype.performOperation = function ( operation ) {
 
-    var op = operation.operator;
+    var o = operation.operator;
     var f = operation.firstNumber;
     var s = operation.secondNumber;
     var ok = operationResultType.SUCCESS;
     var r = null;
     try {
-        if ( op === operators.PLUS )
+        if ( o === operators.PLUS )
             r = new Result( this.sum( f, s ), ok );
-        else if ( op === operators.MINUS )
+        else if ( o === operators.MINUS )
             r = new Result( this.substract( f, s ), ok );
-        else if ( op === operators.TIMES )
+        else if ( o === operators.TIMES )
             r = new Result( this.times( f, s ), ok );
-        else if ( op === operators.DIVISION )
+        else if ( o === operators.DIVISION )
             r = new Result( this.div( f, s ), ok );
     } catch ( e ) {
-        if ( e.toString().indexOf("Division by zero") >= 0 )
-            r = new Result( 'E', operationResultType.ERROR_DIVISION_BY_ZERO );
-        else
-            r = new Result( 'E', operationResultType.UNKNOWN_ERROR )
+        r = this.buildErrorResult( e, r );
     }
     return r;
 

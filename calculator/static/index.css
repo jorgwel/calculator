@@ -45,9 +45,9 @@ header {
 #history_items li {
     list-style: none;
     border-bottom: 1px dotted #ccc;
-    font-family: 'Caveat Brush', cursive;
+    font-family: 'BenchNine', sans-serif;
     letter-spacing: .13em;
-    font-size: 1.2em;
+    font-size: 1.3em;
     font-stretch: ultra-condensed;
 }
 #history_items li:hover {

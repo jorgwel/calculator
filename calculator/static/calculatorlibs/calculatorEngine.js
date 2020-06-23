@@ -86,18 +86,25 @@ CalculatorEngine.prototype.deleteDigit = function () {
     }
 }
 
+CalculatorEngine.prototype.setSuccessfulCalculationState = function( r ) {
+    this.screen.setResult( r.result );
+    this.printer.print( this.o.toString() );
+    this.printer.print( "=" + r.result );
+    this.o.resetOperation();
+}
+
+CalculatorEngine.prototype.setErroneousCalculationState = function ( r ) {
+    this.printer.printError( this.o.toString() );
+    this.printer.printError( r.resultType );
+    this.screen.setError( r.result );
+}
+
 CalculatorEngine.prototype.performCalculation = function () {
     var r = this.alu.performOperation( this.o );
-    if ( r.resultType === operationResultType.SUCCESS ) {
-        this.screen.setResult( r.result );
-        this.printer.print(this.o.toString());
-        this.printer.print("=" + r.result);
-        this.o.resetOperation();
-    } else {
-        this.printer.printError(this.o.toString());
-        this.printer.printError(r.resultType);
-        this.screen.setError( r.result );
-    }
+    if ( r.resultType === operationResultType.SUCCESS )
+        this.setSuccessfulCalculationState( r );
+    else
+        this.setErroneousCalculationState( r );
 }
 
 CalculatorEngine.prototype.act = function ( value, actionType ) {

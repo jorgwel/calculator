@@ -22,16 +22,12 @@ CalculatorOuterBox.prototype.setError = function ( value ) {
 };
 
 CalculatorOuterBox.prototype.addLog = function ( value ) {
-    var li = $("<li>", {"class": "printed_item"});
-    li.html(value);
-    $("#history_items").append(li);
+    printItem( ["printed_item"], value );
     showBottomOfPrinterLog();
 };
 
 CalculatorOuterBox.prototype.addErrorLog = function ( value ) {
-    var li = $("<li>", {"class": "printed_item error"});
-    li.html(value);
-    $("#history_items").append(li);
+    printItem( ["printed_item", "error"], value );
 };
 
 CalculatorOuterBox.prototype.clearLog = function () {
@@ -132,4 +128,10 @@ function showBottomOfPrinterLog() {
     var isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 1;
     if ( !isScrolledToBottom )
         out.scrollTop = out.scrollHeight - out.clientHeight;
+}
+
+function printItem( classNames, value ) {
+    var li = $( "<li>", { "class": classNames.join( " " ) } );
+    li.html( value );
+    $( "#history_items" ).append( li );
 }

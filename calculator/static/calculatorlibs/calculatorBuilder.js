@@ -25,13 +25,21 @@ CalculatorBuilder.prototype.buildEngine = function () {
     return this;
 }
 
-CalculatorBuilder.prototype.connectBoxWithCircuits = function () {
+CalculatorBuilder.prototype.connectBoxToScreen = function () {
     this.circuits.screen.setResult = this.box.setResult;
     this.circuits.screen.getResult = this.box.getResult;
     this.circuits.screen.setError = this.box.setError;
+}
+
+CalculatorBuilder.prototype.connectBoxToPrinter = function () {
     this.circuits.printer.print = this.box.addLog;
     this.circuits.printer.clear = this.box.clearLog;
     this.circuits.printer.printError = this.box.addErrorLog;
+}
+
+CalculatorBuilder.prototype.connectBoxWithCircuits = function () {
+    this.connectBoxToScreen( this );
+    this.connectBoxToPrinter( this );
     return this;
 }
 
