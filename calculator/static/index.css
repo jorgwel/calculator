@@ -10,16 +10,24 @@ header {
     font-size: 3em;
 }
 
-.calculator-case {
-    text-align: center;
-}
-
 .desk {
     display: grid;
     grid-template-columns: 70% 30%;
+    grid-template-areas:
+            "calculator log";
 }
+
+.calculator-case {
+    text-align: center;
+    grid-area: calculator;
+}
+
 #history_panel {
     background: #f2f2f2;
+    grid-area: log;
+    border-radius: 50px;
+    margin-left: 11px;
+
 }
 /*Tomé los estilos de: https://css-tricks.com/how-to-create-a-notebook-design-with-css/*/
 #history_items {
@@ -64,12 +72,13 @@ header {
     width: 2px;
     height: 80px;
 }
-h4 {
+.log-title {
     font-family: 'PT Sans', monospace;
-    font-size: 42px;
+    font-size: 3em;
     text-align: left;
     color: black;
     margin-left: 45px;
+    margin-bottom: 11px;
 }
 .calculator-row {
     display: grid;
@@ -230,5 +239,21 @@ h4 {
 @media only screen and (max-width: 600px) {
     header {
         font-size: 1.5em;
+    }
+    .desk {
+        grid-template-areas:
+                "calculator"
+                "log";
+    }
+    #history_items {
+        max-height: 150px;
+    }
+    #history_panel {
+        margin-top: 11px;
+    }
+    .log-title {
+        font-size: 2em;
+        margin-left: 0px;
+        margin-top: 11px;
     }
 }
