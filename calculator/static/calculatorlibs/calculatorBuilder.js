@@ -31,6 +31,7 @@ CalculatorBuilder.prototype.connectBoxWithCircuits = function () {
     this.circuits.screen.setError = this.box.setError;
     this.circuits.printer.print = this.box.addLog;
     this.circuits.printer.clear = this.box.clearLog;
+    this.circuits.printer.printError = this.box.addErrorLog;
     return this;
 }
 

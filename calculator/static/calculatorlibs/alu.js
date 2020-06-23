@@ -5,7 +5,8 @@ function Alu() {
 
 var operationResultType = {
     SUCCESS: 'SUCCESS',
-    ERROR: 'ERROR'
+    UNKNOWN_ERROR: 'Unkown error',
+    ERROR_DIVISION_BY_ZERO: 'Division by zero',
 }
 
 function Result( result, typeOfResult ) {
@@ -51,7 +52,10 @@ Alu.prototype.performOperation = function ( operation ) {
         else if ( op === operators.DIVISION )
             r = new Result( this.div( f, s ), ok );
     } catch ( e ) {
-        r = new Result( 'E', operationResultType.ERROR )
+        if ( e.toString().indexOf("Division by zero") >= 0 )
+            r = new Result( 'E', operationResultType.ERROR_DIVISION_BY_ZERO );
+        else
+            r = new Result( 'E', operationResultType.UNKNOWN_ERROR )
     }
     return r;
 

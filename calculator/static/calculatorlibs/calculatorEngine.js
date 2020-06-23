@@ -94,6 +94,8 @@ CalculatorEngine.prototype.performCalculation = function () {
         this.printer.print("=" + r.result);
         this.o.resetOperation();
     } else {
+        this.printer.printError(this.o.toString());
+        this.printer.printError(r.resultType);
         this.screen.setError( r.result );
     }
 }

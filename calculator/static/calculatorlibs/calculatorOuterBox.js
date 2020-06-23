@@ -27,6 +27,12 @@ CalculatorOuterBox.prototype.addLog = function ( value ) {
     $("#history_panel").append(d);
 };
 
+CalculatorOuterBox.prototype.addErrorLog = function ( value ) {
+    var d = $("<div>", {"class": "printed_item"});
+    d.html(value);
+    $("#history_panel").append(d);
+};
+
 CalculatorOuterBox.prototype.clearLog = function () {
     $("#history_panel").html("");
 };
