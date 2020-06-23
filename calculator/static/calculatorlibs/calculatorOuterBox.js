@@ -22,19 +22,19 @@ CalculatorOuterBox.prototype.setError = function ( value ) {
 };
 
 CalculatorOuterBox.prototype.addLog = function ( value ) {
-    var d = $("<div>", {"class": "printed_item"});
-    d.html(value);
-    $("#history_panel").append(d);
+    var li = $("<li>", {"class": "printed_item"});
+    li.html(value);
+    $("#history_items").append(li);
 };
 
 CalculatorOuterBox.prototype.addErrorLog = function ( value ) {
-    var d = $("<div>", {"class": "printed_item"});
-    d.html(value);
-    $("#history_panel").append(d);
+    var li = $("<li>", {"class": "printed_item"});
+    li.html(value);
+    $("#history_items").append(li);
 };
 
 CalculatorOuterBox.prototype.clearLog = function () {
-    $("#history_panel").html("");
+    $("#history_items").html("");
 };
 
 CalculatorOuterBox.prototype.addKeyListenerToBody = function ( keyboardValues, id ) {

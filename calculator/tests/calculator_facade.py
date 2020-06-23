@@ -20,7 +20,7 @@ class CalculatorFacade:
         self.body = self.driver.find_element_by_xpath("//body")
 
     def get_logs(self):
-        elements = self.driver.find_elements_by_xpath("//div[@class='printed_item']")
+        elements = self.driver.find_elements_by_xpath("//*[contains(@class, 'printed_item')]")
         return list(map(lambda e: e.text, elements))
 
     def get_result(self):
