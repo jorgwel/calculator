@@ -33,7 +33,6 @@ header {
 #history_items {
     color: #555;
     font-size: 22px;
-    border: 1px solid #dedede;
     text-align: right;
     min-height: 150px;
     max-height: 500px;
