@@ -23,6 +23,22 @@ class CalculatorActions(ServerTest):
         assert self.calculator_facade.get_result() == '0'
         assert self.calculator_facade.get_error() == ''
 
+    def test_calculator_saves_operations(self):
+        self.check_clicks([
+            ["+", "0"],
+            ["1", "1"],
+            ["=", "1"],
+            ["C", "0"],
+            ["+", "0"],
+            ["2", "2"],
+            ["=", "2"],
+        ])
+        self.check_logs([
+            ["0+1", PrintedLogType.NORMAL],
+            ["=1", PrintedLogType.NORMAL],
+            ["0+2", PrintedLogType.NORMAL],
+            ["=2", PrintedLogType.NORMAL]
+        ])
 
     def test_calculator_saves_operations(self):
         self.check_clicks([

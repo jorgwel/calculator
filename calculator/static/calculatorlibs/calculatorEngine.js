@@ -110,13 +110,18 @@ CalculatorEngine.prototype.performCalculation = function () {
 CalculatorEngine.prototype.act = function ( value, actionType ) {
     if ( actionType === actionTypes.TYPING_DIGIT ) {
         this.setNewValueOnField( value );
-    }
-    if ( actionType === actionTypes.DELETE_DIGIT ) {
+    } else if ( actionType === actionTypes.DELETE_DIGIT ) {
         this.deleteDigit();
     } else if ( actionType === actionTypes.SETTING_OPERATION ) {
-        var result = this.screen.getResult();
-        if ( this.o.isReset() && this.isDifferentFromZero( result ) )
-            this.typeDigit( result );
+        var r = this.screen.getResult();
+        if ( this.o.isReset()){
+            if ( this.isDifferentFromZero( r ) ){
+                this.o.firstNumber = r;
+            } else {
+                this.o.firstNumber = 0;
+                this.typeDigit( r );
+            }
+        }
         this.o.operator = value;
     } else if ( actionType === actionTypes.CLEAR ) {
         this.o.resetOperation();
