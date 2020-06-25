@@ -20,3 +20,6 @@ class Server(ServerAdapter):
 
     def stop(self):
         self.server.shutdown()
+
+    def server_close(self):
+        self.server.server_close()
