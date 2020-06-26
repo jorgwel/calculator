@@ -1,7 +1,7 @@
 from tests.calculator_facade import PrintedLog
 
 
-class EventsChecker:
+class CalculatorEventsChecker:
     def __init__(self, calculator_facade):
         self.f = calculator_facade
 
