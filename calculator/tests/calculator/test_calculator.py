@@ -1,10 +1,10 @@
 import unittest
 
-from tests.calculator_facade import CalculatorFacade
-from tests.calculator_events_checker import CalculatorEventsChecker
-from tests.server_test import ServerTest
+from .calculator_facade import CalculatorFacade
+from .calculator_events_checker import CalculatorEventsChecker
+from ..server_test import ServerTest
 
-from tests.calculator_facade import PrintedLogType
+from .calculator_facade import PrintedLogType
 
 HOME = "http://localhost:3000"
 

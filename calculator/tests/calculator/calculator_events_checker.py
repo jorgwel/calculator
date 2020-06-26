@@ -1,4 +1,4 @@
-from tests.calculator_facade import PrintedLog
+from .calculator_facade import PrintedLog
 
 
 class CalculatorEventsChecker:
