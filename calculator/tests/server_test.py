@@ -5,15 +5,17 @@ from selenium import webdriver
 from server.api import app
 from server.server import Server
 
-HOME = "http://localhost:3000"
-
 
 class ServerTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.driver = webdriver.Firefox()
         cls.start_test_server()
-        cls.driver.get(HOME)
+        cls.driver.get(cls.get_page())
+
+    @classmethod
+    def get_page(cls):
+        pass
 
     @classmethod
     def tearDownClass(cls):

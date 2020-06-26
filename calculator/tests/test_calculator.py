@@ -6,8 +6,13 @@ from tests.server_test import ServerTest
 
 from tests.calculator_facade import PrintedLogType
 
+HOME = "http://localhost:3000"
 
 class CalculatorActions(ServerTest):
+
+    @classmethod
+    def get_page(cls):
+        return HOME
 
     def setUp(self):
         print("Testing", self._testMethodName)
